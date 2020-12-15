@@ -31,3 +31,17 @@ artifacts:
   - path: '**\PuppeteerSharp.RendererCli.exe'
     name: PuppeteerSharp.RendererCli
 
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: /G1AWAN6rAx8wnb36AM3XpYDyK9cVtfa3RdOsDYSw+Pxmy8AjztIGL7Zoo8nIikw
+    skip_symbols: false
+    on:
+      branch: main
+    artifact: /.*(\.|\.s)nupkg/
+  - provider: GitHub
+    auth_token:
+      secure: tio44a4PvWOdIHek43DoVSy8qygQwPpINw+foze+eGE8hysjNI0VVKxKkmj4GLQc
+    artifact: PuppeteerSharp.RendererNuget,PuppeteerSharp.RendererCli
+    on:
+      branch: main
