@@ -18,7 +18,7 @@ namespace PuppeteerSharp.RendererCliTests
         public async Task ConversionShouldWork()
         {
             var testFileName = "BasicTextFormated.html";
-            var sourceHtmlFilePath = $"../../../SourceTestFiles/{testFileName}";
+            var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
             var actualFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.pdf");
 
             await Program.Main(new[] { sourceHtmlFilePath, actualFilePath });
