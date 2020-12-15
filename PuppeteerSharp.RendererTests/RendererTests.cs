@@ -14,8 +14,8 @@ namespace PuppeteerSharp.RendererTests
         public async Task ShouldConvertHtmlToPdf(string testFileName)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
-            var actualFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.pdf");
-            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedFromHtml{testFileName}.png";
+            var actualFilePath = Path.Combine(Path.GetTempPath(), $"ActualConvertHtmlToPdf{testFileName}.pdf");
+            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedFromHtmlConvertHtmlToPdf{testFileName}.png";
 
             if (File.Exists(actualFilePath))
             {
@@ -39,8 +39,8 @@ namespace PuppeteerSharp.RendererTests
         public async Task ShouldConvertHtmlToPng(string testFileName)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
-            var actualFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.png");
-            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/Expected{testFileName}.png";
+            var actualFilePath = Path.Combine(Path.GetTempPath(), $"ActualConvertHtmlToPng{testFileName}.png");
+            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedConvertHtmlToPng{testFileName}.png";
 
             if (File.Exists(actualFilePath))
             {
