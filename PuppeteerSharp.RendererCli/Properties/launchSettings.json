@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PuppeteerSharp.RendererCli": {
+      "commandName": "Project",
+      "commandLineArgs": "source.docx destination.html"
+    }
+  }
+}
