@@ -23,8 +23,6 @@ namespace PuppeteerSharp.RendererCliTests
 
             await Program.Main(new[] { sourceHtmlFilePath, actualFilePath });
 
-            var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName);
-
             Assert.True(File.Exists(actualFilePath));
         }
     }

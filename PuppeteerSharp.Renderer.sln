@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FC3F4498-FA14-48A8-AA41-8D9095A0844F}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		PuppeteerSharp.Renderer\NugetIcon.png = PuppeteerSharp.Renderer\NugetIcon.png
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -16,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PuppeteerSharp.RendererTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PuppeteerSharp.RendererCli", "PuppeteerSharp.RendererCli\PuppeteerSharp.RendererCli.csproj", "{BE60CFAD-B5B5-40AE-B459-8AB75886E717}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppeteerSharp.RendererCliTests", "PuppeteerSharp.RendererCliTests\PuppeteerSharp.RendererCliTests.csproj", "{E302C121-55F9-4905-AA36-AFB3968D2A65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PuppeteerSharp.RendererCliTests", "PuppeteerSharp.RendererCliTests\PuppeteerSharp.RendererCliTests.csproj", "{E302C121-55F9-4905-AA36-AFB3968D2A65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

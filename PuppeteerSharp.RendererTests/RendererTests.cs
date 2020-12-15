@@ -4,19 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace PuppeteerSharp.RendererTests
 {
     public class RendererTests
     {
-        private readonly ITestOutputHelper output;
-
-        public RendererTests(ITestOutputHelper output)
-        {
-            this.output = output;
-        }
-
         [Theory]
         [InlineData("BasicTextFormated.html")]
         public async Task ShouldConvertHtmlToPdf(string testFileName)
