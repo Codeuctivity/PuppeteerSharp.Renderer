@@ -41,7 +41,7 @@ artifacts:
   - path: '**\PuppeteerSharp.Renderer.*.*nupkg'
     name: PuppeteerSharp.RendererNuget
 
-  - path: '**\PuppeteerSharp.RendererCli.exe'
+  - path: PuppeteerSharp.RendererCli\bin\Release\net5.0\publish\PuppeteerSharp.RendererCli.exe
     name: PuppeteerSharp.RendererCli
 
 deploy:
