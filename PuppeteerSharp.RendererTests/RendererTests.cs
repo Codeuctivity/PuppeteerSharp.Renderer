@@ -21,7 +21,7 @@ namespace PuppeteerSharp.RendererTests
         [InlineData("BasicTextFormated.html")]
         public async Task ShouldConvertHtmlToPdf(string testFileName)
         {
-            var sourceHtmlFilePath = $"../../../SourceTestFiles/{testFileName}";
+            var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
             var actualFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.pdf");
             var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedFromHtml{testFileName}.png";
 
@@ -46,7 +46,7 @@ namespace PuppeteerSharp.RendererTests
         [InlineData("BasicTextFormated.html")]
         public async Task ShouldConvertHtmlToPng(string testFileName)
         {
-            var sourceHtmlFilePath = $"../../../SourceTestFiles/{testFileName}";
+            var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
             var actualFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.png");
             var expectReferenceFilePath = $"../../../ExpectedTestOutcome/Expected{testFileName}.png";
 

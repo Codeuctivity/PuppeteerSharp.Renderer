@@ -1,50 +1,50 @@
 ﻿using Codeuctivity;
-using Codeuctivity.PuppeteerSharp;
+using System;
 using System.IO;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using Xunit;
 
 namespace PuppeteerSharp.RendererTests
 {
     internal static class DocumentAsserter
     {
-        internal static async Task EqualFileContentAsync(string actualFilePath, string expectReferenceFilePath)
+        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath)
         {
-            var actualFullPath = Path.GetFullPath(actualFilePath);
-            var expectFullPath = Path.GetFullPath(expectReferenceFilePath);
+            var actualFullPath = Path.GetFullPath(actualImagePath);
+            var expectFullPath = Path.GetFullPath(expectImageFilePath);
 
-            Assert.True(File.Exists(actualFullPath), $"actualFilePath not found {actualFullPath}");
-            Assert.True(File.Exists(expectFullPath), $"ExpectReferenceFilePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
-            var actualHtmlContent = File.ReadAllBytesAsync(actualFullPath);
-            var expectedHtmlContent = File.ReadAllBytesAsync(expectFullPath);
-            await Task.WhenAll(actualHtmlContent, expectedHtmlContent);
+            Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
+            Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
 
-            Assert.True(actualHtmlContent.Result == expectedHtmlContent.Result, $"Expected {expectFullPath}\ndiffers to actual {actualFullPath}");
-        }
+            if (ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath))
+            {
+                return;
+            }
 
-        internal static void AssertImageIsEqual(string actualFilePath, string expectReferenceFilePath)
-        {
-            var actualFullPath = Path.GetFullPath(actualFilePath);
-            var expectFullPath = Path.GetFullPath(expectReferenceFilePath);
+            var osSpezificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
 
-            Assert.True(File.Exists(actualFullPath), $"actualFilePath not found {actualFullPath}");
-            Assert.True(File.Exists(expectFullPath), $"ExpectReferenceFilePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
-            Assert.True(ImageSharpCompare.ImageAreEqual(actualFilePath, expectFullPath), $"Expected {expectFullPath}\ndiffers to actual {actualFullPath}");
-        }
+            var allowedDiffImage = $"{expectFullPath}.diff.{osSpezificDiffFileSuffix}.png";
 
-        internal static async Task AssertRenderedHtmlIsEqual(string actualFilePath, string expectReferenceFilePath)
-        {
-            var actualFullPath = Path.GetFullPath(actualFilePath);
-            var expectFullPath = Path.GetFullPath(expectReferenceFilePath);
+            if (File.Exists(allowedDiffImage))
+            {
+                var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
 
-            Assert.True(File.Exists(actualFullPath), $"actualFilePath not found {actualFullPath}");
-            var chromiumRenderer = await Renderer.CreateAsync();
-            var pathRasterizedHtml = actualFilePath + ".png";
-            await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
+                if (result.AbsoluteError == 0)
+                {
+                    return;
+                }
+            }
 
-            Assert.True(File.Exists(expectFullPath), $"ExpectReferenceFilePath not found \n{expectFullPath}\n copy over \n{pathRasterizedHtml}\n if this is a new test case.");
+            var newDiffImage = $"{actualFullPath}.diff.png";
+            using (var fileStreamDifferenceMask = File.Create(newDiffImage))
+            using (var maskImage = ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
+            {
+                SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
+            }
 
-            AssertImageIsEqual(pathRasterizedHtml, expectReferenceFilePath);
+            var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
+            var base64fyedImageDiff = Convert.ToBase64String(File.ReadAllBytes(newDiffImage));
+            Assert.True(ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath), $"Expected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
         }
     }
 }

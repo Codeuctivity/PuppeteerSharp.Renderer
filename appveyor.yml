@@ -1,17 +1,18 @@
 version: 1.0.{build}
+environment:
+  # Windows specific setting
+  nodejs_version: "12"
 image:
   - Ubuntu
   - Visual Studio 2019
 skip_tags: true
 configuration: Release
-before_build:
-  - ps: dotnet restore
-build:
-  project: PuppeteerSharp.Renderer.sln
-  publish_nuget: true
-  publish_nuget_symbols: true
-  use_snupkg_format: true
-  verbosity: minimal
+install:
+  # Windows specific setting
+  - ps: if ($IsWindows -or $ENV:OS) { Install-Product node '12' x64 } 
+  - ps: node --version
+  - ps: node -p "process.arch"
+  - ps: npm --version
 after_build:
   - ps: dotnet publish .\PuppeteerSharp.RendererCli -p:PublishProfile=PuppeteerSharp.RendererCliWindows
 

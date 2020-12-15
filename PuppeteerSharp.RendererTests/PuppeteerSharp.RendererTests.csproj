@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SourceTestFiles\**" />
+    <EmbeddedResource Remove="SourceTestFiles\**" />
+    <None Remove="SourceTestFiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ImageSharpCompare" Version="1.0.27" />
     <PackageReference Include="PdfjsSharp" Version="1.0.39" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="8.15.0.24505">
@@ -30,9 +36,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PuppeteerSharp.Renderer\PuppeteerSharp.Renderer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="SourceTestFiles\" />
   </ItemGroup>
 </Project>
