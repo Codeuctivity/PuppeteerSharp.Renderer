@@ -72,9 +72,9 @@ namespace Codeuctivity.PuppeteerSharp
         /// Converts a HTML file to a PNG
         /// </summary>
         /// <param name="sourceHtmlFilePath"></param>
-        /// <param name="destinationPdfFilePath"></param>
+        /// <param name="destinationPngFilePath"></param>
         /// <returns></returns>
-        public async Task ConvertHtmlToPng(string sourceHtmlFilePath, string destinationPdfFilePath)
+        public async Task ConvertHtmlToPng(string sourceHtmlFilePath, string destinationPngFilePath)
         {
             if (!File.Exists(sourceHtmlFilePath))
             {
@@ -84,7 +84,7 @@ namespace Codeuctivity.PuppeteerSharp
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
             var page = await Browser.NewPageAsync().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
-            await page.ScreenshotAsync(destinationPdfFilePath, new ScreenshotOptions() { FullPage = true }).ConfigureAwait(false);
+            await page.ScreenshotAsync(destinationPngFilePath, new ScreenshotOptions() { FullPage = true }).ConfigureAwait(false);
         }
 
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

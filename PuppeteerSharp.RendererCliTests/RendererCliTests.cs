@@ -6,7 +6,7 @@ using Xunit;
 
 namespace PuppeteerSharp.RendererCliTests
 {
-    public class UnitTest1
+    public class RendererCliTests
     {
         [Fact]
         public void VersionShouldBeProcessed()
