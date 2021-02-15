@@ -6,8 +6,18 @@ Renders HTML to PDF or PNGs
 
 - Based on PuppeteerSharp
 - Focused on Windows and Linux support
+- Give the cli version a try - [PuppeteerSharp.RendererCli.exe](https://github.com/Codeuctivity/PuppeteerSharp.Renderer/releases)
+
+## Howto render HTML to PDF
 
 ```c#
 await using var chromiumRenderer = await Renderer.CreateAsync();
 await chromiumRenderer.ConvertHtmlToPdf(sourceHtmlFilePath, desitinationPdf);
+```
+
+## Howto render HTML to PNG
+
+```c#
+await using var chromiumRenderer = await Renderer.CreateAsync();
+await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
 ```

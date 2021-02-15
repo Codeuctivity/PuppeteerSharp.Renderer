@@ -31,7 +31,7 @@ namespace PuppeteerSharp.RendererTests
             var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
 
             Assert.Single(actualImages);
-            DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath);
+            DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 50);
         }
 
         [Theory]
@@ -51,7 +51,7 @@ namespace PuppeteerSharp.RendererTests
 
             await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath);
 
-            DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath);
+            DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 50);
         }
     }
 }
