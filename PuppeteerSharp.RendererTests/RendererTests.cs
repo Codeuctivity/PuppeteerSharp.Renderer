@@ -51,7 +51,7 @@ namespace PuppeteerSharp.RendererTests
 
             await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath);
 
-            DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 50);
+            DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 3100);
         }
 
         [Fact]
