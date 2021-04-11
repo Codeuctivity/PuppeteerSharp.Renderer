@@ -53,5 +53,14 @@ namespace PuppeteerSharp.RendererTests
 
             DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 50);
         }
+
+        [Fact]
+        public async Task ShouldDisposeGracefull()
+        {
+            await using (var chromiumRenderer = new Renderer())
+            {
+                Assert.Null(chromiumRenderer.BrowserFetcher);
+            }
+        }
     }
 }

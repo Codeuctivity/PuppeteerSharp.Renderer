@@ -44,7 +44,7 @@ namespace Codeuctivity.PuppeteerSharp
             BrowserFetcher = browserFetcher;
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
 
-            await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultRevision).ConfigureAwait(false);
+            await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision).ConfigureAwait(false);
             Browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true }).ConfigureAwait(false);
             return this;
         }
@@ -97,6 +97,11 @@ namespace Codeuctivity.PuppeteerSharp
 
         ValueTask IAsyncDisposable.DisposeAsync()
         {
+            if (Browser == null)
+            {
+                return new ValueTask();
+            }
+
             Browser.CloseAsync().ConfigureAwait(false);
             return ((IAsyncDisposable)Browser).DisposeAsync();
         }
