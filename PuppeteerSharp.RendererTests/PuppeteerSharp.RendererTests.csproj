@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="ImageSharpCompare" Version="1.1.34" />
     <PackageReference Include="PdfjsSharp" Version="1.0.50" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.20.0.28934">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.21.0.30542">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
