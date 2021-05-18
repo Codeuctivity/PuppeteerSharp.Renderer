@@ -9,13 +9,13 @@ namespace Codeuctivity.PuppeteerSharp
     /// <summary>
     /// Renders HTML files
     /// </summary>
-    public class Renderer : IAsyncDisposable
+    public class Renderer : IAsyncDisposable, IDisposable
     {
         private Browser Browser { get; set; } = default!;
         private int LastProgressValue { get; set; }
 
         /// <summary>
-        /// Browserfetcher - used to get chromium bins
+        /// Browser fetcher - used to get chromium bins
         /// </summary>
         public BrowserFetcher BrowserFetcher { get; private set; } = default!;
 
@@ -63,7 +63,7 @@ namespace Codeuctivity.PuppeteerSharp
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             await page.PdfAsync(destinationPdfFilePath).ConfigureAwait(false);
         }
@@ -82,7 +82,7 @@ namespace Codeuctivity.PuppeteerSharp
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             await page.ScreenshotAsync(destinationPngFilePath, new ScreenshotOptions() { FullPage = true }).ConfigureAwait(false);
         }
@@ -95,15 +95,52 @@ namespace Codeuctivity.PuppeteerSharp
             }
         }
 
-        ValueTask IAsyncDisposable.DisposeAsync()
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
         {
-            if (Browser == null)
-            {
-                return new ValueTask();
-            }
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
-            Browser.CloseAsync().ConfigureAwait(false);
-            return ((IAsyncDisposable)Browser).DisposeAsync();
+        /// <summary>
+        /// DisposeAsync
+        /// </summary>
+        /// <returns></returns>
+        public async ValueTask DisposeAsync()
+        {
+            await DisposeAsyncCore();
+
+            Dispose(disposing: false);
+#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
+            GC.SuppressFinalize(this);
+#pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Browser?.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// DisposeAsync
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async ValueTask DisposeAsyncCore()
+        {
+            if (Browser is not null)
+            {
+                await Browser.CloseAsync();
+                await Browser.DisposeAsync();
+            }
         }
     }
 }

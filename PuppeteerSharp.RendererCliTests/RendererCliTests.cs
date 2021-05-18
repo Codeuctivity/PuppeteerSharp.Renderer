@@ -11,7 +11,8 @@ namespace PuppeteerSharp.RendererCliTests
         [Fact]
         public void VersionShouldBeProcessed()
         {
-            Version.TryParse(Program.Version.ToString(), out _);
+            var success = Version.TryParse(Program.Version.ToString(), out _);
+            Assert.True(success);
         }
 
         [Fact]

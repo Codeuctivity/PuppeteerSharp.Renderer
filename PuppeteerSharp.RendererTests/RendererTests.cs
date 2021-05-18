@@ -1,5 +1,6 @@
 ﻿using Codeuctivity.PdfjsSharp;
 using Codeuctivity.PuppeteerSharp;
+using PuppeteerSharp.RendererTests.Infrastrukture;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,16 +23,19 @@ namespace PuppeteerSharp.RendererTests
                 File.Delete(actualFilePath);
             }
 
-            await using var chromiumRenderer = await Renderer.CreateAsync();
-            await chromiumRenderer.ConvertHtmlToPdf(sourceHtmlFilePath, actualFilePath);
+            await using (var chromiumRenderer = await Renderer.CreateAsync())
+            {
+                await chromiumRenderer.ConvertHtmlToPdf(sourceHtmlFilePath, actualFilePath);
 
-            var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName);
+                var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName);
 
-            using var rasterize = new Rasterizer();
-            var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
+                using var rasterize = new Rasterizer();
+                var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
 
-            Assert.Single(actualImages);
-            DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 50);
+                Assert.Single(actualImages);
+                DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 50);
+            }
+            await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
         }
 
         [Theory]
@@ -47,20 +51,27 @@ namespace PuppeteerSharp.RendererTests
                 File.Delete(actualFilePath);
             }
 
-            await using var chromiumRenderer = await Renderer.CreateAsync();
+            await using (var chromiumRenderer = await Renderer.CreateAsync())
+            {
+                await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath);
 
-            await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath);
+                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 3500);
+            }
 
-            DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 3100);
+            await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
         }
 
         [Fact]
         public async Task ShouldDisposeGracefull()
         {
+            var initialChromiumTasks = ChromiumProcessDisposedAsserter.CountChromiumTasks();
+
             await using (var chromiumRenderer = new Renderer())
             {
                 Assert.Null(chromiumRenderer.BrowserFetcher);
             }
+            var afterDisposeChromiumTasks = ChromiumProcessDisposedAsserter.CountChromiumTasks();
+            Assert.Equal(afterDisposeChromiumTasks, initialChromiumTasks);
         }
     }
 }
