@@ -82,7 +82,7 @@ namespace Codeuctivity.PuppeteerSharp
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
             await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
-            await page.ScreenshotAsync(destinationPngFilePath, new ScreenshotOptions() { FullPage = true }).ConfigureAwait(false);
+            await page.ScreenshotAsync(destinationPngFilePath, new ScreenshotOptions { FullPage = true }).ConfigureAwait(false);
         }
 
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
