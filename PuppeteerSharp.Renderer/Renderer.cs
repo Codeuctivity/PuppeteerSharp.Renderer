@@ -54,7 +54,6 @@ namespace Codeuctivity.PuppeteerSharp
         /// </summary>
         /// <param name="sourceHtmlFilePath"></param>
         /// <param name="destinationPdfFilePath"></param>
-        /// <returns></returns>
         public async Task ConvertHtmlToPdf(string sourceHtmlFilePath, string destinationPdfFilePath)
         {
             if (!File.Exists(sourceHtmlFilePath))
@@ -73,7 +72,6 @@ namespace Codeuctivity.PuppeteerSharp
         /// </summary>
         /// <param name="sourceHtmlFilePath"></param>
         /// <param name="destinationPngFilePath"></param>
-        /// <returns></returns>
         public async Task ConvertHtmlToPng(string sourceHtmlFilePath, string destinationPngFilePath)
         {
             if (!File.Exists(sourceHtmlFilePath))
@@ -107,7 +105,6 @@ namespace Codeuctivity.PuppeteerSharp
         /// <summary>
         /// DisposeAsync
         /// </summary>
-        /// <returns></returns>
         public async ValueTask DisposeAsync()
         {
             await DisposeAsyncCore();
@@ -133,7 +130,6 @@ namespace Codeuctivity.PuppeteerSharp
         /// <summary>
         /// DisposeAsync
         /// </summary>
-        /// <returns></returns>
         protected virtual async ValueTask DisposeAsyncCore()
         {
             if (Browser is not null)
