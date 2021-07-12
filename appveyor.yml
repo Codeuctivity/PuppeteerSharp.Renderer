@@ -54,7 +54,7 @@ deploy:
     artifact: /.*(\.|\.s)nupkg/
   - provider: GitHub
     auth_token:
-      secure: tio44a4PvWOdIHek43DoVSy8qygQwPpINw+foze+eGE8hysjNI0VVKxKkmj4GLQc
+      secure: BwbBo1NjpzGwD7tfvqcH/r0wqo+zRZ5H9t41f/PakBX8IyRMVNV0W+w5c/z4vYZB
     artifact: PuppeteerSharp.RendererNuget,PuppeteerSharp.RendererCli
     on:
       branch: main
