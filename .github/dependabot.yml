@@ -14,5 +14,7 @@ updates:
       - dependency-name: "xunit"
       - dependency-name: "xunit.runner.visualstudio"
       - dependency-name: "MSTest.TestAdapter"
+      - dependency-name: "MSTest.TestFramework"
       - dependency-name: "ImageSharpCompare"
       - dependency-name: "PdfjsSharp"
+      - dependency-name: "Microsoft.SourceLink.GitHub"

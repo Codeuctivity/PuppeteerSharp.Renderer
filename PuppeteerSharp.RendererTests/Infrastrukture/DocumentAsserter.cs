@@ -17,7 +17,7 @@ namespace PuppeteerSharp.RendererTests
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
             var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
 
-            if (ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath))
+            if (ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
             {
                 return;
             }
