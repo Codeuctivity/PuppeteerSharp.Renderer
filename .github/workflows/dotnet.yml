@@ -43,6 +43,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
+    - name: Publish
+      run: dotnet publish .\PuppeteerSharp.RendererCli -p:PublishProfile=PuppeteerSharp.RendererCliWindows
     - name: NugetPush
       run: |
           dotnet nuget push ./PuppeteerSharp.Renderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
@@ -55,6 +57,7 @@ jobs:
         files: |
           ./PuppeteerSharp.Renderer/bin/Release/*.nupkg
           ./PuppeteerSharp.Renderer/bin/Release/*.snupkg
+          ./PuppeteerSharp.RendererCli\bin\Release\net6.0\publish\PuppeteerSharp.RendererCli.exe
 
   deployTest:
     if: github.ref != 'refs/heads/main'
@@ -70,6 +73,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
+    - name: Publish
+      run: dotnet publish .\PuppeteerSharp.RendererCli -p:PublishProfile=PuppeteerSharp.RendererCliWindows
     - name: NugetPush
       run: |
           ls ./PuppeteerSharp.Renderer/bin/Release
@@ -83,3 +88,4 @@ jobs:
         files: |
           ./PuppeteerSharp.Renderer/bin/Release/*.nupkg
           ./PuppeteerSharp.Renderer/bin/Release/*.snupkg
+          ./PuppeteerSharp.RendererCli\bin\Release\net6.0\publish\PuppeteerSharp.RendererCli.exe
