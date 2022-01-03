@@ -44,7 +44,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish ./PuppeteerSharp.RendererCli --configuration Release
+      run: dotnet publish ./PuppeteerSharp.RendererCli --configuration Release -p:PublishProfile=FolderProfile
     - name: NugetPush
       run: |
           dotnet nuget push ./PuppeteerSharp.Renderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
@@ -74,7 +74,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish ./PuppeteerSharp.RendererCli --configuration Release
+      run: dotnet publish ./PuppeteerSharp.RendererCli --configuration Release -p:PublishProfile=FolderProfile
     - name: NugetPush
       run: |
           ls ./PuppeteerSharp.Renderer/bin/Release
