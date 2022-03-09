@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<RepositoryUrl>https://github.com/Codeuctivity/PuppeteerSharp.Renderer</RepositoryUrl>
 		<PackageTags>HtmlToPdf HtmlToPng HTML render convert PDF PNG PuppeteerSharp HTML2PDF HTML2PNG linux windows</PackageTags>
@@ -19,25 +18,28 @@
 		<Description>Renders HTML to PNG or PDF, supports windows and linux</Description>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<AssemblyOriginatorKeyFile>PuppeteerSharp.Renderer.snk</AssemblyOriginatorKeyFile>
-		<SignAssembly>false</SignAssembly>
+		<SignAssembly>True</SignAssembly>
+		<Optimize Condition="'$(GITHUB_ACTIONS)' == 'true'">true</Optimize>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<LangVersion>9.0</LangVersion>
 		<Nullable>enable</Nullable>
-		<PackageId>PuppeteerSharp.Renderer</PackageId>
-		<Product>PuppeteerSharp.Renderer</Product>
-		<AssemblyName>Codeuctivity.PuppeteerSharp.Renderer</AssemblyName>
-		<RootNamespace>Codeuctivity.PuppeteerSharp.Renderer</RootNamespace>
+		<PackageId>Codeuctivity.HtmlRenderer</PackageId>
+		<Product>Codeuctivity.HtmlRenderer</Product>
+		<AssemblyName>Codeuctivity.HtmlRenderer</AssemblyName>
+		<RootNamespace>Codeuctivity.HtmlRenderer</RootNamespace>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<AssemblyOriginatorKeyFile>Codeuctivity.HtmlRenderer.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
-		<PackageReference Include="PuppeteerSharp" Version="6.1.0" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503">
+		<PackageReference Include="PuppeteerSharp" Version="6.2.0" />
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.36.1.44192">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

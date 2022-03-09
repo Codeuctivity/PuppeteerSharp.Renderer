@@ -1,10 +1,10 @@
-using PuppeteerSharp.RendererCli;
+using Codeuctivity.HtmlRendererCli;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PuppeteerSharp.RendererCliTests
+namespace Codeuctivity.HtmlRendererCliTests
 {
     public class RendererCliTests
     {

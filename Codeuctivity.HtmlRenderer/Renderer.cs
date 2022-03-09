@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Codeuctivity.PuppeteerSharp
+namespace Codeuctivity.HtmlRenderer
 {
     /// <summary>
     /// Renders HTML files
@@ -44,8 +44,8 @@ namespace Codeuctivity.PuppeteerSharp
             BrowserFetcher = browserFetcher;
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
 
-            await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision).ConfigureAwait(false);
-            Browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true }).ConfigureAwait(false);
+            await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+            Browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
             return this;
         }
 

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PuppeteerSharp.RendererTests.Infrastrukture
+namespace Codeuctivity.HtmlRendererTests.Infrastrukture
 {
     public static class ChromiumProcessDisposedAsserter
     {

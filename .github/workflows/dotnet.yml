@@ -1,6 +1,6 @@
 name: .NET build and test
 env:
-  CURRENT_VERSION: 1.2.${{ github.run_number }}
+  CURRENT_VERSION: 2.0.${{ github.run_number }}
   LAST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 on:
@@ -44,10 +44,10 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish ./PuppeteerSharp.RendererCli --configuration Release -p:PublishProfile=FolderProfile
+      run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfile
     - name: NugetPush
       run: |
-          dotnet nuget push ./PuppeteerSharp.Renderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
+          dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -55,9 +55,9 @@ jobs:
         prerelease: false
         title: "Release Build"
         files: |
-          ./PuppeteerSharp.Renderer/bin/Release/*.nupkg
-          ./PuppeteerSharp.Renderer/bin/Release/*.snupkg
-          ./PuppeteerSharp.RendererCli/bin/Release/net6.0/publish/win-x86/PuppeteerSharp.RendererCli.exe
+          ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
+          ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
+          ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/win-x86/Codeuctivity.HtmlRendererCli.exe
 
   deployTest:
     if: github.ref != 'refs/heads/main'
@@ -74,11 +74,11 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish ./PuppeteerSharp.RendererCli --configuration Release -p:PublishProfile=FolderProfile
+      run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfile
     - name: NugetPush
       run: |
-          ls ./PuppeteerSharp.Renderer/bin/Release
-          dotnet nuget push ./PuppeteerSharp.Renderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
+          ls ./Codeuctivity.HtmlRenderer/bin/Release
+          dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -86,6 +86,6 @@ jobs:
         prerelease: true
         title: "Prerelease Build"
         files: |
-          ./PuppeteerSharp.Renderer/bin/Release/*.nupkg
-          ./PuppeteerSharp.Renderer/bin/Release/*.snupkg
-          ./PuppeteerSharp.RendererCli/bin/Release/net6.0/publish/win-x86/PuppeteerSharp.RendererCli.exe
+          ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
+          ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
+          ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/win-x86/Codeuctivity.HtmlRendererCli.exe

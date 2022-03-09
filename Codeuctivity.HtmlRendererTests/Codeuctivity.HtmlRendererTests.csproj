@@ -16,13 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ImageSharpCompare" Version="1.2.11" />
-    <PackageReference Include="PdfjsSharp" Version="1.1.18" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503">
+    <PackageReference Include="Codeuctivity.ImageSharpCompare" Version="2.0.18" />
+    <PackageReference Include="Codeuctivity.PdfjsSharp" Version="1.2.27" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.36.1.44192">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,6 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PuppeteerSharp.Renderer\PuppeteerSharp.Renderer.csproj" />
+    <ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />
   </ItemGroup>
 </Project>
