@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PuppeteerSharp.RendererCliTests
+namespace Codeuctivity.HtmlRendererCliTests
 {
     public class RendererCliTests
     {

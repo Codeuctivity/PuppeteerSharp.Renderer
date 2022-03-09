@@ -1,12 +1,12 @@
 ﻿using Codeuctivity.HtmlRenderer;
+using Codeuctivity.HtmlRendererTests.Infrastrukture;
 using Codeuctivity.PdfjsSharp;
-using PuppeteerSharp.RendererTests.Infrastrukture;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PuppeteerSharp.RendererTests
+namespace Codeuctivity.HtmlRendererTests
 {
     public class RendererTests
     {
