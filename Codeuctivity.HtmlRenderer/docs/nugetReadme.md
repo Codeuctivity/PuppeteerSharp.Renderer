@@ -1,6 +1,4 @@
-What can you do with this? ClosedXML allows you to create Excel files without the Excel application. The typical example is creating Excel reports on a web server.
-
-Example:
+Depends on node, runs on windows and linux
 
 # Render HTML to PDF
 
