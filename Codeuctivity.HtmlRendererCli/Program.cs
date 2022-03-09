@@ -1,10 +1,11 @@
-﻿using Codeuctivity.PuppeteerSharp;
+﻿using Codeuctivity.HtmlRenderer;
+using PuppeteerSharp;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace PuppeteerSharp.RendererCli
+namespace Codeuctivity.HtmlRendererCli
 {
     public class Program
     {

@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+	  <RootNamespace>Codeuctivity.HtmlRendererCli</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -11,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PuppeteerSharp.Renderer\PuppeteerSharp.Renderer.csproj" />
+    <ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />
   </ItemGroup>
 
 </Project>

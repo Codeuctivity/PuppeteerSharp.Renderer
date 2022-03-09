@@ -1,10 +1,10 @@
-﻿using Codeuctivity;
+﻿using Codeuctivity.ImageSharpCompare;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Xunit;
 
-namespace PuppeteerSharp.RendererTests
+namespace PuppeteerSharp.RendererTests.Infrastrukture
 {
     internal static class DocumentAsserter
     {

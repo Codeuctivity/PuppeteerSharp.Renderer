@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.36.1.44192">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PuppeteerSharp.RendererCli\PuppeteerSharp.RendererCli.csproj" />
+    <ProjectReference Include="..\Codeuctivity.HtmlRendererCli\Codeuctivity.HtmlRendererCli.csproj" />
   </ItemGroup>
 
 </Project>
