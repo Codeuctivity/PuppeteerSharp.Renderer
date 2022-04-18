@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 using Xunit;
 
@@ -7,7 +6,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 {
     internal static class DocumentAsserter
     {
-        private const string TestOutput = "../../../TestResult";
+        private const string TestOutputFirectory = "../../../../TestResult";
 
         internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount)
         {
@@ -38,7 +37,9 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 
                 if (allowedPixelErrorCount < resultWithAllowedDiff.PixelErrorCount)
                 {
-                    CopyToTestOutput(actualImagePath, newDiffImage);
+                    CopyToTestOutput(actualImagePath);
+                    CopyToTestOutput(expectImageFilePath);
+                    CopyToTestOutput(newDiffImage);
                 }
 
                 Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}");
@@ -55,19 +56,24 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 
             if (allowedPixelErrorCount < result.PixelErrorCount)
             {
-                CopyToTestOutput(actualImagePath, newDiffImage);
+                CopyToTestOutput(newDiffImage);
+                CopyToTestOutput(actualImagePath);
             }
 
             Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}\nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
         }
 
-        private static void CopyToTestOutput(string actualImagePath, string newDiffImage)
+        private static void CopyToTestOutput(string testOutputFile)
         {
-            if (!Directory.Exists(TestOutput))
-                Directory.CreateDirectory(TestOutput);
+            if (string.IsNullOrEmpty(testOutputFile))
+            {
+                throw new System.ArgumentException($"'{nameof(testOutputFile)}' cannot be null or empty.", nameof(testOutputFile));
+            }
 
-            File.Copy(newDiffImage, Path.Combine(TestOutput, Path.GetFileName(newDiffImage)));
-            File.Copy(actualImagePath, Path.Combine(TestOutput, Path.GetFileName(actualImagePath)));
+            if (!Directory.Exists(TestOutputFirectory))
+                Directory.CreateDirectory(TestOutputFirectory);
+
+            File.Copy(testOutputFile, Path.Combine(TestOutputFirectory, Path.GetFileName(testOutputFile)), true);
         }
     }
 }
