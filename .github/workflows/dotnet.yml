@@ -14,78 +14,90 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - uses: actions/setup-node@v2
-      with:
-        node-version: 14
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --configuration Release
+      - name: Publish Unit Test Results
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: TestResult
+          path: "TestResult/**/*"
 
   deployRelease:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: build 
+    needs: build
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Publish
-      run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfile
-    - name: NugetPush
-      run: |
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Publish
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfile
+      - name: NugetPush
+        env:
+          NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TOKEN }}
+        if: env.NUGET_TOKEN_EXISTS != ''
+        run: |
           dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: ${{ env.CURRENT_VERSION }}
-        prerelease: false
-        title: "Release Build"
-        files: |
-          ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
-          ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-          ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/win-x86/Codeuctivity.HtmlRendererCli.exe
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: ${{ env.CURRENT_VERSION }}
+          prerelease: false
+          title: "Release Build"
+          files: |
+            ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
+            ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/win-x86/Codeuctivity.HtmlRendererCli.exe
 
   deployTest:
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: build 
+    needs: build
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Publish
-      run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfile
-    - name: NugetPush
-      run: |
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Publish
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfile
+      - name: NugetPush
+        env:
+          NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TEST_TOKEN }}
+        if: env.NUGET_TOKEN_EXISTS != ''
+        run: |
           ls ./Codeuctivity.HtmlRenderer/bin/Release
           dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest-prerelease"
-        prerelease: true
-        title: "Prerelease Build"
-        files: |
-          ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
-          ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-          ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/win-x86/Codeuctivity.HtmlRendererCli.exe
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest-prerelease"
+          prerelease: true
+          title: "Prerelease Build"
+          files: |
+            ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
+            ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/win-x86/Codeuctivity.HtmlRendererCli.exe

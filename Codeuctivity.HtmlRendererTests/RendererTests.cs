@@ -1,5 +1,5 @@
 ﻿using Codeuctivity.HtmlRenderer;
-using Codeuctivity.HtmlRendererTests.Infrastrukture;
+using Codeuctivity.HtmlRendererTests.Infrastructure;
 using Codeuctivity.PdfjsSharp;
 using System.IO;
 using System.Linq;

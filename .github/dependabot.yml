@@ -1,5 +1,11 @@
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
+    rebase-strategy: auto
+
   - package-ecosystem: "nuget" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
@@ -15,6 +21,6 @@ updates:
       - dependency-name: "xunit.runner.visualstudio"
       - dependency-name: "MSTest.TestAdapter"
       - dependency-name: "MSTest.TestFramework"
-      - dependency-name: "ImageSharpCompare"
-      - dependency-name: "PdfjsSharp"
+      - dependency-name: "Codeuctivity.ImageSharpCompare"
+      - dependency-name: "Codeuctivity.PdfjsSharp"
       - dependency-name: "Microsoft.SourceLink.GitHub"
