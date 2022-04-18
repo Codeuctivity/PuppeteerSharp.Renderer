@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Codeuctivity.HtmlRenderer
@@ -41,12 +42,27 @@ namespace Codeuctivity.HtmlRenderer
 
         private async Task<Renderer> InitializeAsync(BrowserFetcher browserFetcher)
         {
-            BrowserFetcher = browserFetcher;
+            BrowserFetcher = browserFetcher ?? throw new ArgumentNullException(nameof(browserFetcher));
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
 
             await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
-            Browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+            Browser = await Puppeteer.LaunchAsync(SystemSpecificConfig());
             return this;
+        }
+
+        private static LaunchOptions SystemSpecificConfig()
+        {
+            if (IsRunningOnWsl())
+            {
+                return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
+            }
+
+            return new LaunchOptions { Headless = true };
+        }
+
+        private static bool IsRunningOnWsl()
+        {
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && File.ReadAllText("/proc/version").Contains("Microsoft");
         }
 
         /// <summary>

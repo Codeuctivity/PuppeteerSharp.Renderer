@@ -27,5 +27,8 @@ await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
 ### Linux
 
 ```bash
-sudo apt install libgbm-dev
+sudo apt install libgbm-dev libatk-bridge2.0-0
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+exit
+nvm install 16
 ```
