@@ -33,7 +33,7 @@ namespace Codeuctivity.HtmlRendererTests
                 var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
 
                 Assert.Single(actualImages);
-                DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 900);
+                DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 2000);
             }
             await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
         }
@@ -55,7 +55,7 @@ namespace Codeuctivity.HtmlRendererTests
             {
                 await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath);
 
-                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 6300);
+                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 7000);
             }
 
             await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
