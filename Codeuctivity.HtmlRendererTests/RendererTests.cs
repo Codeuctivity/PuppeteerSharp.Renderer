@@ -33,7 +33,7 @@ namespace Codeuctivity.HtmlRendererTests
                 var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
 
                 Assert.Single(actualImages);
-                DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 300);
+                DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 900);
             }
             await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
         }
