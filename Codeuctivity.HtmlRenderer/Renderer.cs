@@ -65,7 +65,7 @@ namespace Codeuctivity.HtmlRenderer
 
         private LaunchOptions SystemSpecificConfig()
         {
-            if (!string.IsNullOrEmpty(LaunchOptions) && (IsRunningOnWsl() || IsRunningOnAzureLinux()))
+            if (string.IsNullOrEmpty(LaunchOptions) && (IsRunningOnWsl() || IsRunningOnAzureLinux()))
             {
                 return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
             }
