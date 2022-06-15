@@ -88,7 +88,9 @@ namespace Codeuctivity.HtmlRenderer
         private static bool IsRunningOnWsl()
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
                 return false;
+            }
 
             var version = File.ReadAllText("/proc/version");
             var IsWsl = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
