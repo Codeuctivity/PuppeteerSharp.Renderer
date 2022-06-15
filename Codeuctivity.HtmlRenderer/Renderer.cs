@@ -75,12 +75,24 @@ namespace Codeuctivity.HtmlRenderer
 
         private static bool IsRunningOnAzureLinux()
         {
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Environment.GetEnvironmentVariable("WEBSITE_SKU").Contains("Linux");
+            var websiteSku = Environment.GetEnvironmentVariable("WEBSITE_SKU");
+
+            if (string.IsNullOrEmpty(websiteSku))
+            {
+                return false;
+            }
+
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && websiteSku.IndexOf("Linux", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private static bool IsRunningOnWsl()
         {
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && File.ReadAllText("/proc/version").Contains("Microsoft");
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return false;
+
+            var version = File.ReadAllText("/proc/version");
+            var IsWsl = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
+            return IsWsl;
         }
 
         /// <summary>

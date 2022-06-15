@@ -1,8 +1,10 @@
 ﻿using Codeuctivity.HtmlRenderer;
 using Codeuctivity.HtmlRendererTests.Infrastructure;
 using Codeuctivity.PdfjsSharp;
+using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -30,12 +32,25 @@ namespace Codeuctivity.HtmlRendererTests
                 var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName);
 
                 using var rasterize = new Rasterizer();
-                var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
 
-                Assert.Single(actualImages);
-                DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 2000);
+                if (!IsRunningOnWsl())
+                {
+                    var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
+                    Assert.Single(actualImages);
+                    DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 2000);
+                }
             }
             await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
+        }
+
+        private static bool IsRunningOnWsl()
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return false;
+
+            var version = File.ReadAllText("/proc/version");
+            var IsWsl = version.Contains("Microsoft", StringComparison.InvariantCultureIgnoreCase);
+            return IsWsl;
         }
 
         [Theory]
