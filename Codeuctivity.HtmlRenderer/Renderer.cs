@@ -12,6 +12,15 @@ namespace Codeuctivity.HtmlRenderer
     /// </summary>
     public class Renderer : IAsyncDisposable, IDisposable
     {
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="launchOptions"></param>
+        public Renderer(string? launchOptions = null)
+        {
+            LaunchOptions = launchOptions;
+        }
+
         private Browser Browser { get; set; } = default!;
         private int LastProgressValue { get; set; }
 
@@ -19,6 +28,8 @@ namespace Codeuctivity.HtmlRenderer
         /// Browser fetcher - used to get chromium bins
         /// </summary>
         public BrowserFetcher BrowserFetcher { get; private set; } = default!;
+
+        private string? LaunchOptions { get; }
 
         /// <summary>
         /// Call CreateAsync before using ConvertHtmlTo*
@@ -31,33 +42,40 @@ namespace Codeuctivity.HtmlRenderer
         }
 
         /// <summary>
-        /// Call CreateAsync before using ConvertHtmlTo*, accepts custom BrowserFetcher
+        /// Call CreateAsync before using ConvertHtmlTo*, accepts custom BrowserFetcher and custom chromium launch options
         /// </summary>
-        /// <returns>Initialized renderer</returns>
-        public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher)
+        /// <param name="browserFetcher"></param>
+        /// <param name="launchOptions">Adds launch options to chromium</param>
+        /// <returns></returns>
+        public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher, string? launchOptions = null)
         {
-            var html2Pdf = new Renderer();
+            var html2Pdf = new Renderer(launchOptions);
             return html2Pdf.InitializeAsync(browserFetcher);
         }
 
         private async Task<Renderer> InitializeAsync(BrowserFetcher browserFetcher)
         {
-            BrowserFetcher = browserFetcher ?? throw new ArgumentNullException(nameof(browserFetcher));
+            BrowserFetcher = browserFetcher;
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
 
-            await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
-            Browser = await Puppeteer.LaunchAsync(SystemSpecificConfig());
+            _ = await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision ?? string.Empty).ConfigureAwait(false);
+            Browser = await Puppeteer.LaunchAsync(SystemSpecificConfig()).ConfigureAwait(false);
             return this;
         }
 
-        private static LaunchOptions SystemSpecificConfig()
+        private LaunchOptions SystemSpecificConfig()
         {
-            if (IsRunningOnWsl())
+            if (!string.IsNullOrEmpty(LaunchOptions) && (IsRunningOnWsl() || IsRunningOnAzureLinux()))
             {
                 return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
             }
 
             return new LaunchOptions { Headless = true };
+        }
+
+        private static bool IsRunningOnAzureLinux()
+        {
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Environment.GetEnvironmentVariable("WEBSITE_SKU").Contains("Linux");
         }
 
         private static bool IsRunningOnWsl()
@@ -78,7 +96,7 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await using var page = (await Browser.NewPageAsync().ConfigureAwait(false));
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             await page.PdfAsync(destinationPdfFilePath).ConfigureAwait(false);
         }
@@ -96,7 +114,7 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await using var page = (await Browser.NewPageAsync().ConfigureAwait(false));
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             await page.ScreenshotAsync(destinationPngFilePath, new ScreenshotOptions { FullPage = true }).ConfigureAwait(false);
         }
@@ -123,7 +141,7 @@ namespace Codeuctivity.HtmlRenderer
         /// </summary>
         public async ValueTask DisposeAsync()
         {
-            await DisposeAsyncCore();
+            await DisposeAsyncCore().ConfigureAwait(false);
 
             Dispose(disposing: false);
 #pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
@@ -150,8 +168,8 @@ namespace Codeuctivity.HtmlRenderer
         {
             if (Browser is not null)
             {
-                await Browser.CloseAsync();
-                await Browser.DisposeAsync();
+                await Browser.CloseAsync().ConfigureAwait(false);
+                await Browser.DisposeAsync().ConfigureAwait(false);
             }
         }
     }
