@@ -21,7 +21,7 @@ namespace Codeuctivity.HtmlRenderer
             LaunchOptions = launchOptions;
         }
 
-        private Browser Browser { get; set; } = default!;
+        private IBrowser Browser { get; set; } = default!;
         private int LastProgressValue { get; set; }
 
         /// <summary>
@@ -112,6 +112,8 @@ namespace Codeuctivity.HtmlRenderer
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
             await using var page = (await Browser.NewPageAsync().ConfigureAwait(false));
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
+            // Wait for fonts to be loaded. Omitting this might result in no text rendered in PDF.
+            await page.EvaluateExpressionHandleAsync("document.fonts.ready");
             await page.PdfAsync(destinationPdfFilePath).ConfigureAwait(false);
         }
 
@@ -130,6 +132,8 @@ namespace Codeuctivity.HtmlRenderer
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
             await using var page = (await Browser.NewPageAsync().ConfigureAwait(false));
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
+            // Wait for fonts to be loaded. Omitting this might result in no text the screenshot.
+            await page.EvaluateExpressionHandleAsync("document.fonts.ready");
             await page.ScreenshotAsync(destinationPngFilePath, new ScreenshotOptions { FullPage = true }).ConfigureAwait(false);
         }
 
