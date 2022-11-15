@@ -1,17 +1,30 @@
 version: 2
 updates:
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: weekly
+    rebase-strategy: auto
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: weekly
     rebase-strategy: auto
 
-  - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: weekly
+    rebase-strategy: auto
+
+  - package-ecosystem: "nuget"
+    directory: "/"
     schedule:
       interval: "daily"
     ignore:
       - dependency-name: "nunit"
+      - dependency-name: "coverlet.collector"
       - dependency-name: "SonarAnalyzer.CSharp"
       - dependency-name: "AngleSharp"
       - dependency-name: "Microsoft.NET.Test.Sdk"
@@ -24,3 +37,5 @@ updates:
       - dependency-name: "Codeuctivity.ImageSharpCompare"
       - dependency-name: "Codeuctivity.PdfjsSharp"
       - dependency-name: "Microsoft.SourceLink.GitHub"
+      - dependency-name: "Microsoft.AspNetCore.Identity.UI"
+      - dependency-name: "Microsoft.VisualStudio.Web.CodeGeneration.Design"
