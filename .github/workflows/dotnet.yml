@@ -75,7 +75,7 @@ jobs:
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
-            ./Codeuctivity.HtmlRendererCli.Portable.zip
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
 
   deployTest:
     #if: github.ref == 'refs/heads/main'
@@ -91,7 +91,7 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: Publish
+      - name: Publish FolderProfileWindows
         run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfileWindows
       - name: Publish FolderProfilePortable
         run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfilePortable
@@ -118,4 +118,4 @@ jobs:
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
-            ./Codeuctivity.HtmlRendererCli.Portable.zip
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
