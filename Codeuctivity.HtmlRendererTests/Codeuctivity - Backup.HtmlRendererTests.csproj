@@ -17,12 +17,12 @@
 
   <ItemGroup>
     <PackageReference Include="Codeuctivity.ImageSharpCompare" Version="2.0.76" />
-    <PackageReference Include="Codeuctivity.PdfjsSharp" Version="1.2.70" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.48.0.56517">
+    <PackageReference Include="Codeuctivity.PdfjsSharp" Version="1.2.47" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.46.0.54807">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
