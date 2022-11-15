@@ -78,7 +78,7 @@ jobs:
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
 
   deployTest:
-    #if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build
     steps:
