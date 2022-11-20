@@ -58,9 +58,9 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfileWindows
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net7.0 -p:PublishProfile=FolderProfileWindows
       - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfilePortable
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
       - name: Zip FolderProfilePortable
         uses: thedoctor0/zip-release@main
         with:
@@ -104,9 +104,9 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfileWindows
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net7.0 -p:PublishProfile=FolderProfileWindows
       - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -p:PublishProfile=FolderProfilePortable
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
       - name: Zip FolderProfilePortable
         uses: thedoctor0/zip-release@main
         with:
