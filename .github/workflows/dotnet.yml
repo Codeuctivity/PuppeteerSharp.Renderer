@@ -82,7 +82,7 @@ jobs:
           files: |
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net7.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
 
   deployTest:
@@ -129,5 +129,5 @@ jobs:
           files: |
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net7.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
