@@ -18,6 +18,10 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
+          dotnet-version: 7.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
           dotnet-version: 6.0.x
       - uses: actions/setup-node@v3.5.1
         with:
@@ -41,6 +45,10 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -83,6 +91,10 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:

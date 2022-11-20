@@ -65,7 +65,7 @@ namespace Codeuctivity.HtmlRenderer
 
         private LaunchOptions SystemSpecificConfig()
         {
-            if (string.IsNullOrEmpty(LaunchOptions) && (IsRunningOnWsl() || IsRunningOnAzureLinux()))
+            if (string.IsNullOrEmpty(LaunchOptions) && (IsRunningOnWslOrAzure() || IsRunningOnAzureLinux()))
             {
                 return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
             }
@@ -85,7 +85,7 @@ namespace Codeuctivity.HtmlRenderer
             return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && websiteSku.IndexOf("Linux", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        private static bool IsRunningOnWsl()
+        private static bool IsRunningOnWslOrAzure()
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -93,8 +93,10 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var version = File.ReadAllText("/proc/version");
-            var IsWsl = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
-            return IsWsl;
+            var IsAzure = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
+            var IsWsl = version.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
+
+            return IsWsl || IsAzure;
         }
 
         /// <summary>
