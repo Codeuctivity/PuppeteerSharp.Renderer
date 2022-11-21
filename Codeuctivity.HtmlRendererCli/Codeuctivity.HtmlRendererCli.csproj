@@ -1,18 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-	  <RootNamespace>Codeuctivity.HtmlRendererCli</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<RootNamespace>Codeuctivity.HtmlRendererCli</RootNamespace>
+		<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />
+	</ItemGroup>
 
 </Project>
