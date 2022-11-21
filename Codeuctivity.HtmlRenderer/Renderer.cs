@@ -93,8 +93,8 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var version = File.ReadAllText("/proc/version");
-            var IsAzure = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
-            var IsWsl = version.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
+            var IsWsl = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
+            var IsAzure = version.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
 
             return IsWsl || IsAzure;
         }

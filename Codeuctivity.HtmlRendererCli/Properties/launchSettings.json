@@ -2,7 +2,7 @@
   "profiles": {
     "PuppeteerSharp.RendererCli": {
       "commandName": "Project",
-      "commandLineArgs": "source.docx destination.html"
+      "commandLineArgs": "../../../../Codeuctivity.HtmlRendererCliTests/TestInput/BasicTextFormated.html out.pdf"
     }
   }
 }
