@@ -5,7 +5,6 @@
 		<TargetFrameworks>net7.0;net6.0</TargetFrameworks>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<RootNamespace>Codeuctivity.HtmlRendererCli</RootNamespace>
-		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
