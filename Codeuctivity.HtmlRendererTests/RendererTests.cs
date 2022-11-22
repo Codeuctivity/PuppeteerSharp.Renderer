@@ -33,7 +33,7 @@ namespace Codeuctivity.HtmlRendererTests
 
                 using var rasterize = new Rasterizer();
 
-                if (!IsRunningOnWslOrAzure())
+                if (!IsRunningOnWslOrAzureOrMacos())
                 {
                     var actualImages = await rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
                     Assert.Single(actualImages);
@@ -43,7 +43,7 @@ namespace Codeuctivity.HtmlRendererTests
             await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
         }
 
-        private static bool IsRunningOnWslOrAzure()
+        private static bool IsRunningOnWslOrAzureOrMacos()
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -54,7 +54,7 @@ namespace Codeuctivity.HtmlRendererTests
             var IsAzure = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
             var IsWsl = version.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
 
-            return IsWsl || IsAzure;
+            return IsWsl || IsAzure || RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD);
         }
 
         [Theory]
