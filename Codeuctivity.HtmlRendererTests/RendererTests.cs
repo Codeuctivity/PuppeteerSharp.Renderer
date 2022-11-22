@@ -45,6 +45,11 @@ namespace Codeuctivity.HtmlRendererTests
 
         private static bool IsRunningOnWslOrAzureOrMacos()
         {
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+            {
+                return true;
+            }
+
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 return false;
@@ -54,7 +59,7 @@ namespace Codeuctivity.HtmlRendererTests
             var IsAzure = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
             var IsWsl = version.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
 
-            return IsWsl || IsAzure || RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD);
+            return IsWsl || IsAzure;
         }
 
         [Theory]
