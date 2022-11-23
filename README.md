@@ -5,7 +5,6 @@
 Renders HTML to PDF or PNGs
 
 - Based on PuppeteerSharp
-- Focused on Windows and Linux support
 - Give the cli version a try - [Codeuctivity.HtmlRendererCli.exe](https://github.com/Codeuctivity/PuppeteerSharp.Renderer/releases)
 
 ## Render HTML to PDF
