@@ -17,3 +17,4 @@
   - CPU Architecture:
   - .net Version:
   - .net Trimming:
+  - Linux: Output of `cat /proc/version`

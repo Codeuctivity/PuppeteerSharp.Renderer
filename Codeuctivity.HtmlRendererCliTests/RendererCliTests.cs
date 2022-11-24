@@ -56,7 +56,7 @@ namespace Codeuctivity.HtmlRendererCliTests
             };
 
             process.Start();
-            var isExited = process.WaitForExit(60000);
+            var isExited = process.WaitForExit(80000);
 
             if (!isExited)
             {

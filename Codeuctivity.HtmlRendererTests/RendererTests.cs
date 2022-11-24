@@ -1,6 +1,7 @@
 ﻿using Codeuctivity.HtmlRenderer;
 using Codeuctivity.HtmlRendererTests.Infrastructure;
 using Codeuctivity.PdfjsSharp;
+using PuppeteerSharp;
 using System;
 using System.IO;
 using System.Linq;
@@ -39,13 +40,14 @@ namespace Codeuctivity.HtmlRendererTests
                     Assert.Single(actualImages);
                     DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 2000);
                 }
+                File.Delete(actualFilePath);
             }
-            await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
 
         private static bool IsRunningOnWslOrAzureOrMacos()
         {
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
             {
                 return true;
             }
@@ -79,10 +81,11 @@ namespace Codeuctivity.HtmlRendererTests
             {
                 await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath);
 
-                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 7200);
+                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 9000);
             }
 
-            await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
+            File.Delete(actualFilePath);
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
 
         [Fact]
@@ -96,6 +99,30 @@ namespace Codeuctivity.HtmlRendererTests
             }
             var afterDisposeChromiumTasks = ChromiumProcessDisposedAsserter.CountChromiumTasks();
             Assert.Equal(afterDisposeChromiumTasks, initialChromiumTasks);
+        }
+
+        [Theory]
+        [InlineData("BasicTextFormated.html")]
+        public async Task ShouldConvertHtmlToPngNoSandbox(string testFileName)
+        {
+            var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
+            var actualFilePath = Path.Combine(Path.GetTempPath(), $"ActualConvertHtmlToPng{testFileName}.png");
+            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedConvertHtmlToPng{testFileName}.png";
+
+            if (File.Exists(actualFilePath))
+            {
+                File.Delete(actualFilePath);
+            }
+
+            using (var chromiumRenderer = await Renderer.CreateAsync(new BrowserFetcher(), "--no-sandbox"))
+            {
+                await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath);
+
+                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 9000);
+            }
+
+            File.Delete(actualFilePath);
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
     }
 }
