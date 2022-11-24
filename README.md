@@ -31,3 +31,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 exit
 nvm install 18
 ```
+
+... and if that fails you can either find out which dependency is missing on your system or you take a shortcut
+
+```bash
+sudo apt install -y chromium-browser
+```
