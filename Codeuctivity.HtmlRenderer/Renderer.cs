@@ -15,10 +15,33 @@ namespace Codeuctivity.HtmlRenderer
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="launchOptions"></param>
-        public Renderer(string? launchOptions = null)
+        /// <param name="customChromiumArgs"></param>
+        public Renderer(string? customChromiumArgs)
         {
-            LaunchOptions = launchOptions;
+            if (customChromiumArgs == null)
+            {
+                LaunchOptions = SystemSpecificConfig();
+            }
+            else
+            {
+                LaunchOptions = new LaunchOptions() { Args = new[] { customChromiumArgs } };
+            }
+        }
+
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="launchOptions"></param>
+        public Renderer(LaunchOptions? launchOptions = null)
+        {
+            if (launchOptions == null)
+            {
+                LaunchOptions = SystemSpecificConfig();
+            }
+            else
+            {
+                LaunchOptions = launchOptions;
+            }
         }
 
         private IBrowser Browser { get; set; } = default!;
@@ -29,7 +52,7 @@ namespace Codeuctivity.HtmlRenderer
         /// </summary>
         public BrowserFetcher BrowserFetcher { get; private set; } = default!;
 
-        private string? LaunchOptions { get; }
+        private LaunchOptions LaunchOptions { get; }
 
         /// <summary>
         /// Call CreateAsync before using ConvertHtmlTo*
@@ -45,9 +68,20 @@ namespace Codeuctivity.HtmlRenderer
         /// Call CreateAsync before using ConvertHtmlTo*, accepts custom BrowserFetcher and custom chromium launch options
         /// </summary>
         /// <param name="browserFetcher"></param>
-        /// <param name="launchOptions">Adds launch options to chromium</param>
+        /// <param name="chromiumArguments">Adds custom arguments to chromium</param>
         /// <returns></returns>
-        public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher, string? launchOptions = null)
+        public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher, string chromiumArguments)
+        {
+            return CreateAsync(browserFetcher, new LaunchOptions() { Args = new[] { chromiumArguments } });
+        }
+
+        /// <summary>
+        /// Call CreateAsync before using ConvertHtmlTo*, accepts custom BrowserFetcher and custom chromium launch options
+        /// </summary>
+        /// <param name="browserFetcher"></param>
+        /// <param name="launchOptions">Adds launch options to puppeteer</param>
+        /// <returns></returns>
+        public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher, LaunchOptions? launchOptions = null)
         {
             var html2Pdf = new Renderer(launchOptions);
             return html2Pdf.InitializeAsync(browserFetcher);
@@ -59,18 +93,17 @@ namespace Codeuctivity.HtmlRenderer
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
 
             _ = await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision ?? string.Empty).ConfigureAwait(false);
-            Browser = await Puppeteer.LaunchAsync(SystemSpecificConfig()).ConfigureAwait(false);
+            Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
             return this;
         }
 
         private LaunchOptions SystemSpecificConfig()
         {
-            if (string.IsNullOrEmpty(LaunchOptions) && (IsRunningOnWslOrAzure() || IsRunningOnAzureLinux()))
+            if (IsRunningOnWslOrAzure() || IsRunningOnAzureLinux())
             {
                 return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
             }
-
-            return new LaunchOptions { Headless = true };
+            return new LaunchOptions();
         }
 
         private static bool IsRunningOnAzureLinux()
