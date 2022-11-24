@@ -15,16 +15,16 @@ namespace Codeuctivity.HtmlRenderer
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="customChromeiumArgs"></param>
-        public Renderer(string? customChromeiumArgs)
+        /// <param name="customChromiumArgs"></param>
+        public Renderer(string? customChromiumArgs)
         {
-            if (customChromeiumArgs == null)
+            if (customChromiumArgs == null)
             {
                 LaunchOptions = SystemSpecificConfig();
             }
             else
             {
-                LaunchOptions = new LaunchOptions() { Args = new[] { customChromeiumArgs } };
+                LaunchOptions = new LaunchOptions() { Args = new[] { customChromiumArgs } };
             }
         }
 
@@ -68,11 +68,11 @@ namespace Codeuctivity.HtmlRenderer
         /// Call CreateAsync before using ConvertHtmlTo*, accepts custom BrowserFetcher and custom chromium launch options
         /// </summary>
         /// <param name="browserFetcher"></param>
-        /// <param name="chromeiumArguments">Adds custom arguments to chromium</param>
+        /// <param name="chromiumArguments">Adds custom arguments to chromium</param>
         /// <returns></returns>
-        public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher, string chromeiumArguments)
+        public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher, string chromiumArguments)
         {
-            return CreateAsync(browserFetcher, new LaunchOptions() { Args = new[] { chromeiumArguments } });
+            return CreateAsync(browserFetcher, new LaunchOptions() { Args = new[] { chromiumArguments } });
         }
 
         /// <summary>

@@ -42,7 +42,7 @@ namespace Codeuctivity.HtmlRendererTests
                 }
                 File.Delete(actualFilePath);
             }
-            await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
 
         private static bool IsRunningOnWslOrAzureOrMacos()
@@ -85,7 +85,7 @@ namespace Codeuctivity.HtmlRendererTests
             }
 
             File.Delete(actualFilePath);
-            await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace Codeuctivity.HtmlRendererTests
             }
 
             File.Delete(actualFilePath);
-            await ChromiumProcessDisposedAsserter.AssertNoChromeProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
     }
 }

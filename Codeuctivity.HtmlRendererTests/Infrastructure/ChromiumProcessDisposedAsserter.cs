@@ -7,7 +7,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 {
     public static class ChromiumProcessDisposedAsserter
     {
-        public static async Task AssertNoChromeProcessIsRunning()
+        public static async Task AssertNoChromiumProcessIsRunning()
         {
             for (var i = 0; i < 20 && CountChromiumTasks() > 0; i++)
             {
