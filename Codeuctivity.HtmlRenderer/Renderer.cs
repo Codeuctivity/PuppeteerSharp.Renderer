@@ -99,11 +99,24 @@ namespace Codeuctivity.HtmlRenderer
 
         private LaunchOptions SystemSpecificConfig()
         {
-            if (IsRunningOnWslOrAzure() || IsRunningOnAzureLinux())
+            if (IsRunningOnWslOrAzure() || IsRunningOnAzureLinux() || IsRunningLinux())
             {
                 return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
             }
             return new LaunchOptions();
+        }
+
+        private static bool IsRunningLinux()
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return false;
+            }
+
+            var version = File.ReadAllText("/proc/version");
+            var IsLinux = version.IndexOf("Linux", StringComparison.OrdinalIgnoreCase) >= 0;
+
+            return IsLinux;
         }
 
         private static bool IsRunningOnAzureLinux()
