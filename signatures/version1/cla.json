@@ -1,3 +1,12 @@
 {
-   "signedContributors": []
+  "signedContributors": [
+    {
+      "name": "brunbimmer",
+      "id": 88738970,
+      "comment_id": 1327423936,
+      "created_at": "2022-11-25T12:38:27Z",
+      "repoId": 321743436,
+      "pullRequestNo": 39
+    }
+  ]
 }
