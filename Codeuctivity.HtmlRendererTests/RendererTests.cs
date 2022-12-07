@@ -123,9 +123,9 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormatedInlineBackground.html", false)]
-        [InlineData("BasicTextFormatedInlineBackground.html", true)]
-        public async Task ShouldConvertHtmlToPngScreenshotOptions(string testFileName, bool omitBackground)
+        [InlineData("BasicTextFormatedInlineBackground.html", false, 11000)]
+        [InlineData("BasicTextFormatedInlineBackground.html", true, 9500)]
+        public async Task ShouldConvertHtmlToPngScreenshotOptions(string testFileName, bool omitBackground, int allowedPixelDiff)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
             var actualFilePath = Path.Combine(Path.GetTempPath(), $"ActualConvertHtmlToPng{testFileName}.{omitBackground}.png");
@@ -138,11 +138,14 @@ namespace Codeuctivity.HtmlRendererTests
 
             await using (var chromiumRenderer = await Renderer.CreateAsync())
             {
-                ScreenshotOptions screenshotOptions = new ScreenshotOptions();
-                screenshotOptions.OmitBackground = omitBackground;
+                ScreenshotOptions screenshotOptions = new ScreenshotOptions
+                {
+                    OmitBackground = omitBackground
+                };
+
                 await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath, screenshotOptions);
                 // File.Copy(actualFilePath, expectReferenceFilePath);
-                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 9500);
+                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, allowedPixelDiff);
             }
 
             File.Delete(actualFilePath);
