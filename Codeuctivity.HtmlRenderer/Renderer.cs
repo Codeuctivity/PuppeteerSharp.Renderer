@@ -137,7 +137,19 @@ namespace Codeuctivity.HtmlRenderer
         /// </summary>
         /// <param name="sourceHtmlFilePath"></param>
         /// <param name="destinationPdfFilePath"></param>
-        public async Task ConvertHtmlToPdf(string sourceHtmlFilePath, string destinationPdfFilePath)
+        public Task ConvertHtmlToPdf(string sourceHtmlFilePath, string destinationPdfFilePath)
+        {
+            PdfOptions pdfOptions = new PdfOptions();
+            return ConvertHtmlToPdf(sourceHtmlFilePath, destinationPdfFilePath, pdfOptions);
+        }
+
+        /// <summary>
+        /// Converts a HTML file to a PDF
+        /// </summary>
+        /// <param name="sourceHtmlFilePath"></param>
+        /// <param name="destinationPdfFilePath"></param>
+        /// <param name="pdfOptions"></param>
+        public async Task ConvertHtmlToPdf(string sourceHtmlFilePath, string destinationPdfFilePath, PdfOptions pdfOptions)
         {
             if (!File.Exists(sourceHtmlFilePath))
             {
@@ -149,7 +161,7 @@ namespace Codeuctivity.HtmlRenderer
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text rendered in PDF.
             await page.EvaluateExpressionHandleAsync("document.fonts.ready");
-            await page.PdfAsync(destinationPdfFilePath).ConfigureAwait(false);
+            await page.PdfAsync(destinationPdfFilePath, pdfOptions).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -157,7 +169,18 @@ namespace Codeuctivity.HtmlRenderer
         /// </summary>
         /// <param name="sourceHtmlFilePath"></param>
         /// <param name="destinationPngFilePath"></param>
-        public async Task ConvertHtmlToPng(string sourceHtmlFilePath, string destinationPngFilePath)
+        public Task ConvertHtmlToPng(string sourceHtmlFilePath, string destinationPngFilePath)
+        {
+            return ConvertHtmlToPng(sourceHtmlFilePath, destinationPngFilePath, new ScreenshotOptions { FullPage = true });
+        }
+
+        /// <summary>
+        /// Converts a HTML file to a PNG
+        /// </summary>
+        /// <param name="sourceHtmlFilePath"></param>
+        /// <param name="destinationPngFilePath"></param>
+        /// <param name="screenshotOptions"></param>
+        public async Task ConvertHtmlToPng(string sourceHtmlFilePath, string destinationPngFilePath, ScreenshotOptions screenshotOptions)
         {
             if (!File.Exists(sourceHtmlFilePath))
             {
@@ -169,7 +192,7 @@ namespace Codeuctivity.HtmlRenderer
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text the screenshot.
             await page.EvaluateExpressionHandleAsync("document.fonts.ready");
-            await page.ScreenshotAsync(destinationPngFilePath, new ScreenshotOptions { FullPage = true }).ConfigureAwait(false);
+            await page.ScreenshotAsync(destinationPngFilePath, screenshotOptions).ConfigureAwait(false);
         }
 
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
