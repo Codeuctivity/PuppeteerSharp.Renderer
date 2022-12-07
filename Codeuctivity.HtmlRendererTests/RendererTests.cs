@@ -142,7 +142,7 @@ namespace Codeuctivity.HtmlRendererTests
                 screenshotOptions.OmitBackground = omitBackground;
                 await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath, screenshotOptions);
                 // File.Copy(actualFilePath, expectReferenceFilePath);
-                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 9000);
+                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, 9500);
             }
 
             File.Delete(actualFilePath);
