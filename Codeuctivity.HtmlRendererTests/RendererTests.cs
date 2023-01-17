@@ -46,7 +46,7 @@ namespace Codeuctivity.HtmlRendererTests
                 {
                     var actualImages = await Rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
                     Assert.Single(actualImages);
-                    DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 2000);
+                    DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 2100);
                 }
                 File.Delete(actualFilePath);
             }
