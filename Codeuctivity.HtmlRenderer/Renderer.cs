@@ -103,7 +103,7 @@ namespace Codeuctivity.HtmlRenderer
             {
                 return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
             }
-            return new LaunchOptions() { };
+            return new LaunchOptions();
         }
 
         private static bool IsRunningOnAzureLinux()
