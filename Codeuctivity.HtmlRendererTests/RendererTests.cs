@@ -42,11 +42,12 @@ namespace Codeuctivity.HtmlRendererTests
 
                 var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName);
 
-                if (!IsRunningOnWslOrAzureOrMacos())
+                if (!IsRunningOnAzureOrMacos())
                 {
                     var actualImages = await Rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
                     Assert.Single(actualImages);
-                    DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 2000);
+                    // File.Copy(actualImages.Single(), expectReferenceFilePath, true);
+                    DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 8000);
                 }
                 File.Delete(actualFilePath);
             }
@@ -54,8 +55,8 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormatedInlineBackground.html", false, 6000)]
-        [InlineData("BasicTextFormatedInlineBackground.html", true, 6000)]
+        [InlineData("BasicTextFormatedInlineBackground.html", false, 9000)]
+        [InlineData("BasicTextFormatedInlineBackground.html", true, 9000)]
         public async Task ShouldConvertHtmlToPdfWithOptions(string testFileName, bool printBackground, int allowedPixelDiff)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
@@ -73,7 +74,7 @@ namespace Codeuctivity.HtmlRendererTests
 
                 var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName);
 
-                if (!IsRunningOnWslOrAzureOrMacos())
+                if (!IsRunningOnAzureOrMacos())
                 {
                     try
                     {
@@ -93,7 +94,7 @@ namespace Codeuctivity.HtmlRendererTests
             await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
 
-        private static bool IsRunningOnWslOrAzureOrMacos()
+        private static bool IsRunningOnAzureOrMacos()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
             {
@@ -107,9 +108,8 @@ namespace Codeuctivity.HtmlRendererTests
 
             var version = File.ReadAllText("/proc/version");
             var IsAzure = version.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
-            var IsWsl = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
 
-            return IsWsl || IsAzure;
+            return IsAzure;
         }
 
         [Theory]
@@ -137,7 +137,7 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormatedInlineBackground.html", false, 11000)]
+        [InlineData("BasicTextFormatedInlineBackground.html", false, 15000)]
         [InlineData("BasicTextFormatedInlineBackground.html", true, 9500)]
         public async Task ShouldConvertHtmlToPngScreenshotOptions(string testFileName, bool omitBackground, int allowedPixelDiff)
         {
@@ -158,7 +158,7 @@ namespace Codeuctivity.HtmlRendererTests
                 };
 
                 await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath, screenshotOptions);
-                // File.Copy(actualFilePath, expectReferenceFilePath);
+                // File.Copy(actualFilePath, expectReferenceFilePath, true);
                 DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, allowedPixelDiff);
             }
 

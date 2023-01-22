@@ -50,7 +50,7 @@ namespace Codeuctivity.HtmlRenderer
         /// <summary>
         /// Browser fetcher - used to get chromium bins
         /// </summary>
-        public BrowserFetcher BrowserFetcher { get; private set; } = default!;
+        public BrowserFetcher BrowserFetcher { get; private set; }
 
         private LaunchOptions LaunchOptions { get; }
 
@@ -91,8 +91,8 @@ namespace Codeuctivity.HtmlRenderer
         {
             BrowserFetcher = browserFetcher;
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
-
-            _ = await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision ?? string.Empty).ConfigureAwait(false);
+            var revisionInfo = await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision ?? string.Empty).ConfigureAwait(false);
+            LaunchOptions.ExecutablePath = revisionInfo.ExecutablePath;
             Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
             return this;
         }

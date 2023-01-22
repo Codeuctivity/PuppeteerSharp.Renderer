@@ -1,6 +1,6 @@
 name: .NET build and test
 env:
-  CURRENT_VERSION: 2.1.${{ github.run_number }}
+  CURRENT_VERSION: 2.2.${{ github.run_number }}
   LAST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 on:
@@ -58,7 +58,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net7.0 -p:PublishProfile=FolderProfileWindows
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfileWindows
       - name: Publish FolderProfilePortable
         run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
       - name: Zip FolderProfilePortable
