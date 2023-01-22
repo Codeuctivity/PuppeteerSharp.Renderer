@@ -1,6 +1,6 @@
 name: .NET build and test
 env:
-  CURRENT_VERSION: 2.1.${{ github.run_number }}
+  CURRENT_VERSION: 2.2.${{ github.run_number }}
   LAST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 on:
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
-      - uses: actions/setup-node@v3.5.1
+      - uses: actions/setup-node@v3.6.0
         with:
           node-version: 18
       - name: Restore dependencies
@@ -58,8 +58,6 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net7.0 -p:PublishProfile=FolderProfileWindows
-      - name: Publish FolderProfilePortable
         run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
       - name: Zip FolderProfilePortable
         uses: thedoctor0/zip-release@main
@@ -82,7 +80,6 @@ jobs:
           files: |
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net7.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
 
   deployTest:
@@ -103,8 +100,6 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net7.0 -p:PublishProfile=FolderProfileWindows
       - name: Publish FolderProfilePortable
         run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
       - name: Zip FolderProfilePortable
@@ -129,5 +124,4 @@ jobs:
           files: |
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net7.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip

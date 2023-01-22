@@ -5,7 +5,7 @@
 Renders HTML to PDF or PNGs
 
 - Based on PuppeteerSharp
-- Give the cli version a try - [Codeuctivity.HtmlRendererCli.exe](https://github.com/Codeuctivity/PuppeteerSharp.Renderer/releases)
+- Give the CLI version a try - [Codeuctivity.HtmlRendererCli.exe](https://github.com/Codeuctivity/PuppeteerSharp.Renderer/releases)
 
 ## Render HTML to PDF
 
@@ -23,10 +23,10 @@ await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
 
 ## Development
 
-### Linux
+### Linux / WSL
 
 ```bash
-sudo apt install libgbm-dev libatk-bridge2.0-0
+sudo apt install libgbm-dev libatk-bridge2.0-0 libnss3 libcups2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libpango-1.0-0 libcairo2 libasound2
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 exit
 nvm install 18
