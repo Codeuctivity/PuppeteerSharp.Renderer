@@ -38,7 +38,7 @@ namespace Codeuctivity.HtmlRendererCli
 
             Console.WriteLine($"Converting {inputPathDocx} to {outputPathHtml} using PuppeteerSharp.Renderer {Version}");
             BrowserFetcherOptions options = new BrowserFetcherOptions();
-            options.Path = Directory.GetCurrentDirectory() ?? Path.GetTempPath();
+            options.Path = Path.GetTempPath();
             var browserFetcher = new BrowserFetcher(options);
             Console.WriteLine($"Fetching chromium from web, to {browserFetcher.DownloadsFolder} .... ");
             browserFetcher.DownloadProgressChanged += BrowserFetcher_DownloadProgressChanged;
