@@ -34,7 +34,7 @@
 		<ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<AssemblyOriginatorKeyFile>Codeuctivity.HtmlRenderer.snk</AssemblyOriginatorKeyFile>
-		<IsTrimmable>false</IsTrimmable>
+		<IsTrimmable>true</IsTrimmable>
 	</PropertyGroup>
 
 	<ItemGroup>
