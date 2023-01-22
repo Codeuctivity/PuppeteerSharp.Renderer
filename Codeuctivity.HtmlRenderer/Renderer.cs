@@ -50,7 +50,7 @@ namespace Codeuctivity.HtmlRenderer
         /// <summary>
         /// Browser fetcher - used to get chromium bins
         /// </summary>
-        public BrowserFetcher BrowserFetcher { get; private set; }
+        public BrowserFetcher? BrowserFetcher { get; private set; }
 
         private LaunchOptions LaunchOptions { get; }
 

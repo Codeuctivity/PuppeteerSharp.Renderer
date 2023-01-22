@@ -81,6 +81,7 @@ jobs:
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
 
   deployTest:
     if: github.ref == 'refs/heads/main'
@@ -125,3 +126,4 @@ jobs:
             ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
             ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
             ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
+            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
