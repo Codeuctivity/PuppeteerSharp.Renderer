@@ -85,7 +85,7 @@ namespace Codeuctivity.HtmlRendererTests
                     }
                     catch (InvocationException ex)
                     {
-                        // Working around issue in Jering.Javascript.NodeJS, silencing false positiv failing
+                        // Working around issue in Jering.Javascript.NodeJS, silencing false positive failing
                         Assert.True(RuntimeInformation.IsOSPlatform(OSPlatform.Windows), ex.Message);
                     }
                 }
