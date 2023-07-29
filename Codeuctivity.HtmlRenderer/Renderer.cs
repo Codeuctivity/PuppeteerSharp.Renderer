@@ -195,6 +195,29 @@ namespace Codeuctivity.HtmlRenderer
             await page.ScreenshotAsync(destinationPngFilePath, screenshotOptions).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Converts a HTML string to a PNG buffer
+        /// </summary>
+        /// <param name="sourceHtmlData"></param>
+        public Task<byte[]> ConvertHtmlStringToPngData(string sourceHtmlData)
+        {
+            return ConvertHtmlStringToPngData(sourceHtmlData, new ScreenshotOptions { FullPage = true });
+        }
+
+        /// <summary>
+        /// Converts a HTML string to a PNG buffer
+        /// </summary>
+        /// <param name="sourceHtmlData"></param>
+        /// <param name="screenshotOptions"></param>
+        public async Task<byte[]> ConvertHtmlStringToPngData(string sourceHtmlData, ScreenshotOptions screenshotOptions)
+        {
+            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await page.SetContentAsync(sourceHtmlData).ConfigureAwait(false);
+            // Wait for fonts to be loaded. Omitting this might result in no text the screenshot.
+            await page.EvaluateExpressionHandleAsync("document.fonts.ready");
+            return await page.ScreenshotDataAsync(screenshotOptions).ConfigureAwait(false);
+        }
+
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if (LastProgressValue != e.ProgressPercentage)
