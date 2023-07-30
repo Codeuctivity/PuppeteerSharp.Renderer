@@ -166,6 +166,38 @@ namespace Codeuctivity.HtmlRendererTests
             await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
         }
 
+        [Theory]
+        [InlineData("BasicTextFormatedInlineBackground.html", false, 15000)]
+        [InlineData("BasicTextFormatedInlineBackground.html", true, 9500)]
+        public async Task ShouldConvertHtmlToPngBufferOptions(string testFileName, bool omitBackground, int allowedPixelDiff)
+        {
+            var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
+            var actualFilePath = Path.Combine(Path.GetTempPath(), $"ActualConvertHtmlToPng{testFileName}.{omitBackground}.png");
+            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedConvertHtmlToPng{testFileName}.{omitBackground}.png";
+
+            if (File.Exists(actualFilePath))
+            {
+                File.Delete(actualFilePath);
+            }
+
+            await using (var chromiumRenderer = await Renderer.CreateAsync())
+            {
+                ScreenshotOptions screenshotOptions = new ScreenshotOptions
+                {
+                    OmitBackground = omitBackground
+                };
+
+                var fileContent = await File.ReadAllTextAsync(sourceHtmlFilePath);
+                var pngData = await chromiumRenderer.ConvertHtmlStringToPngData(fileContent, screenshotOptions);
+                // File.Copy(actualFilePath, expectReferenceFilePath, true);
+                await File.WriteAllBytesAsync(actualFilePath, pngData);
+                DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, allowedPixelDiff);
+            }
+
+            File.Delete(actualFilePath);
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
+        }
+
         [Fact]
         public async Task ShouldDisposeGracefull()
         {
