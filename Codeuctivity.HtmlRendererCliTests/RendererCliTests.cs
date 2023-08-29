@@ -40,13 +40,13 @@ namespace Codeuctivity.HtmlRendererCliTests
                 File.Delete(actualFilePath);
             }
 
-            var acutualWindowsBinary = DotnetPublishFolderProfileWindows("Codeuctivity.HtmlRendererCli");
+            var actualWindowsBinary = DotnetPublishFolderProfileWindows("Codeuctivity.HtmlRendererCli");
 
             using var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = acutualWindowsBinary,
+                    FileName = actualWindowsBinary,
                     Arguments = $" {sourceHtmlFilePath} {actualFilePath}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,

@@ -199,7 +199,7 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Fact]
-        public async Task ShouldDisposeGracefull()
+        public async Task ShouldDisposeGraceful()
         {
             var initialChromiumTasks = ChromiumProcessDisposedAsserter.CountChromiumTasks();
 

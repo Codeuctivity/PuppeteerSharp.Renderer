@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Codeuctivity.HtmlRendererCli
 {
-    public class Program
+    public static class Program
     {
         public static readonly Assembly Reference = typeof(Renderer).Assembly;
         public static readonly Version Version = Reference.GetName().Version;
@@ -39,11 +39,14 @@ namespace Codeuctivity.HtmlRendererCli
             Console.WriteLine($"Converting {inputPathDocx} to {outputPathHtml} using PuppeteerSharp.Renderer {Version}");
             BrowserFetcherOptions options = new BrowserFetcherOptions();
             options.Path = Path.GetTempPath();
-            var browserFetcher = new BrowserFetcher(options);
-            Console.WriteLine($"Fetching chromium from web, to {browserFetcher.DownloadsFolder} .... ");
+            using var browserFetcher = new BrowserFetcher(options);
+            Console.WriteLine($"Fetching chromium from web, to {browserFetcher.CacheDir} .... ");
             browserFetcher.DownloadProgressChanged += BrowserFetcher_DownloadProgressChanged;
-            await using var chromiumRenderer = await Renderer.CreateAsync(browserFetcher, string.Empty);
-            await chromiumRenderer.ConvertHtmlToPdf(inputPathDocx, outputPathHtml);
+
+            await using (var chromiumRenderer = await Renderer.CreateAsync(browserFetcher, string.Empty))
+            {
+                await chromiumRenderer.ConvertHtmlToPdf(inputPathDocx, outputPathHtml);
+            }
             return 0;
         }
 
