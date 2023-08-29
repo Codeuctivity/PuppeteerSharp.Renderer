@@ -89,7 +89,12 @@ namespace Codeuctivity.HtmlRenderer
 
         private async Task<Renderer> InitializeAsync(BrowserFetcher browserFetcher)
         {
-            BrowserFetcher = browserFetcher;
+            // for macsome reason the download progress is not called on macos
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                BrowserFetcher = new BrowserFetcher();
+            else
+                BrowserFetcher = browserFetcher;
+
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
             var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
             LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
