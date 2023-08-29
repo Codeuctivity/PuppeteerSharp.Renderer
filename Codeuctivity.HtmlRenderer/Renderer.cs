@@ -93,11 +93,13 @@ namespace Codeuctivity.HtmlRenderer
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 BrowserFetcher = new BrowserFetcher();
             else
+            {
                 BrowserFetcher = browserFetcher;
+                BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
+                var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
+                LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
+            }
 
-            BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
-            var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
-            LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
             Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
             return this;
         }
