@@ -19,7 +19,7 @@ namespace Codeuctivity.HtmlRendererCliTests
         [Fact]
         public async Task ConversionShouldWork()
         {
-            var testFileName = "BasicTextFormated.html";
+            var testFileName = "BasicTextFormatted.html";
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
             var actualFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.pdf");
 
@@ -28,10 +28,10 @@ namespace Codeuctivity.HtmlRendererCliTests
             Assert.True(File.Exists(actualFilePath));
         }
 
-        [FactRunableOnWindows]
+        [FactRunnableOnWindows]
         public void PublishedSelfContainedBinaryShouldWork()
         {
-            var testFileName = "BasicTextFormated.html";
+            var testFileName = "BasicTextFormatted.html";
             var sourceHtmlFilePath = Path.GetFullPath($"../../../TestInput/{testFileName}");
             var actualFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.pdf");
 

@@ -91,7 +91,7 @@ namespace Codeuctivity.HtmlRenderer
         {
             BrowserFetcher = browserFetcher;
             BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
-            var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId ?? string.Empty).ConfigureAwait(false);
+            var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
             LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
             Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
             return this;

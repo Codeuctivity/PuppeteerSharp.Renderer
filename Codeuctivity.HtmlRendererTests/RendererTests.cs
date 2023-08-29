@@ -24,7 +24,7 @@ namespace Codeuctivity.HtmlRendererTests
         public Rasterizer Rasterize { get; private set; }
 
         [Theory]
-        [InlineData("BasicTextFormated.html")]
+        [InlineData("BasicTextFormatted.html")]
         public async Task ShouldConvertHtmlToPdf(string testFileName)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
@@ -55,8 +55,8 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormatedInlineBackground.html", false, 9000)]
-        [InlineData("BasicTextFormatedInlineBackground.html", true, 9000)]
+        [InlineData("BasicTextFormattedInlineBackground.html", false, 9000)]
+        [InlineData("BasicTextFormattedInlineBackground.html", true, 9000)]
         public async Task ShouldConvertHtmlToPdfWithOptions(string testFileName, bool printBackground, int allowedPixelDiff)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
@@ -113,7 +113,7 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormated.html")]
+        [InlineData("BasicTextFormatted.html")]
         public async Task ShouldConvertHtmlToPng(string testFileName)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
@@ -137,8 +137,8 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormatedInlineBackground.html", false, 15000)]
-        [InlineData("BasicTextFormatedInlineBackground.html", true, 9500)]
+        [InlineData("BasicTextFormattedInlineBackground.html", false, 15000)]
+        [InlineData("BasicTextFormattedInlineBackground.html", true, 9500)]
         public async Task ShouldConvertHtmlToPngScreenshotOptions(string testFileName, bool omitBackground, int allowedPixelDiff)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
@@ -167,8 +167,8 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormatedInlineBackground.html", false, 15000)]
-        [InlineData("BasicTextFormatedInlineBackground.html", true, 9500)]
+        [InlineData("BasicTextFormattedInlineBackground.html", false, 15000)]
+        [InlineData("BasicTextFormattedInlineBackground.html", true, 9500)]
         public async Task ShouldConvertHtmlToPngBufferOptions(string testFileName, bool omitBackground, int allowedPixelDiff)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
@@ -212,7 +212,7 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormated.html")]
+        [InlineData("BasicTextFormatted.html")]
         public async Task ShouldConvertHtmlToPngNoSandbox(string testFileName)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
