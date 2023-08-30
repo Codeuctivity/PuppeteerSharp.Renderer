@@ -71,7 +71,9 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             }
 
             if (!Directory.Exists(TestOutputFirectory))
+            {
                 Directory.CreateDirectory(TestOutputFirectory);
+            }
 
             File.Copy(testOutputFile, Path.Combine(TestOutputFirectory, Path.GetFileName(testOutputFile)), true);
         }
