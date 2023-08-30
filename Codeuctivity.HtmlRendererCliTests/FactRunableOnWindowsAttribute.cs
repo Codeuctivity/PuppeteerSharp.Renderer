@@ -3,9 +3,9 @@ using Xunit;
 
 namespace Codeuctivity.HtmlRendererCliTests
 {
-    internal class FactRunableOnWindowsAttribute : FactAttribute
+    internal class FactRunnableOnWindowsAttribute : FactAttribute
     {
-        public FactRunableOnWindowsAttribute()
+        public FactRunnableOnWindowsAttribute()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

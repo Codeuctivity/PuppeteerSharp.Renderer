@@ -20,7 +20,7 @@ namespace Codeuctivity.HtmlRenderer
         {
             if (customChromiumArgs == null)
             {
-                LaunchOptions = SystemSpecificConfig();
+                LaunchOptions = Renderer.SystemSpecificConfig();
             }
             else
             {
@@ -36,7 +36,7 @@ namespace Codeuctivity.HtmlRenderer
         {
             if (launchOptions == null)
             {
-                LaunchOptions = SystemSpecificConfig();
+                LaunchOptions = Renderer.SystemSpecificConfig();
             }
             else
             {
@@ -89,15 +89,26 @@ namespace Codeuctivity.HtmlRenderer
 
         private async Task<Renderer> InitializeAsync(BrowserFetcher browserFetcher)
         {
-            BrowserFetcher = browserFetcher;
-            BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
-            var revisionInfo = await BrowserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision ?? string.Empty).ConfigureAwait(false);
-            LaunchOptions.ExecutablePath = revisionInfo.ExecutablePath;
-            Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
+            // for macsome reason the download progress is not called on macos
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                using var browserFetcher1 = new BrowserFetcher();
+                await browserFetcher1.DownloadAsync();
+                Browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+            }
+            else
+            {
+                BrowserFetcher = browserFetcher;
+                BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
+                var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
+                LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
+                Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
+            }
+
             return this;
         }
 
-        private LaunchOptions SystemSpecificConfig()
+        private static LaunchOptions SystemSpecificConfig()
         {
             if (IsRunningOnWslOrAzure() || IsRunningOnAzureLinux())
             {
@@ -126,8 +137,8 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var version = File.ReadAllText("/proc/version");
-            var IsWsl = version.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
-            var IsAzure = version.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
+            var IsWsl = version?.IndexOf("Microsoft", StringComparison.OrdinalIgnoreCase) >= 0;
+            var IsAzure = version?.IndexOf("azure", StringComparison.OrdinalIgnoreCase) >= 0;
 
             return IsWsl || IsAzure;
         }
@@ -157,10 +168,10 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            await using var page = (await Browser.NewPageAsync().ConfigureAwait(false));
+            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text rendered in PDF.
-            await page.EvaluateExpressionHandleAsync("document.fonts.ready");
+            await page.EvaluateExpressionHandleAsync("document.fonts.ready").ConfigureAwait(false);
             await page.PdfAsync(destinationPdfFilePath, pdfOptions).ConfigureAwait(false);
         }
 
@@ -188,10 +199,10 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            await using var page = (await Browser.NewPageAsync().ConfigureAwait(false));
+            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text the screenshot.
-            await page.EvaluateExpressionHandleAsync("document.fonts.ready");
+            await page.EvaluateExpressionHandleAsync("document.fonts.ready").ConfigureAwait(false);
             await page.ScreenshotAsync(destinationPngFilePath, screenshotOptions).ConfigureAwait(false);
         }
 
@@ -214,7 +225,7 @@ namespace Codeuctivity.HtmlRenderer
             await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
             await page.SetContentAsync(sourceHtmlData).ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text the screenshot.
-            await page.EvaluateExpressionHandleAsync("document.fonts.ready");
+            await page.EvaluateExpressionHandleAsync("document.fonts.ready").ConfigureAwait(false);
             return await page.ScreenshotDataAsync(screenshotOptions).ConfigureAwait(false);
         }
 
@@ -243,9 +254,7 @@ namespace Codeuctivity.HtmlRenderer
             await DisposeAsyncCore().ConfigureAwait(false);
 
             Dispose(disposing: false);
-#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
             GC.SuppressFinalize(this);
-#pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
         }
 
         /// <summary>

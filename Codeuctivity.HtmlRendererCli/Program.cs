@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Codeuctivity.HtmlRendererCli
 {
-    public class Program
+    public static class Program
     {
         public static readonly Assembly Reference = typeof(Renderer).Assembly;
         public static readonly Version Version = Reference.GetName().Version;
@@ -15,18 +15,18 @@ namespace Codeuctivity.HtmlRendererCli
 
         public static async Task<int> Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args?.Length != 2)
             {
                 Console.WriteLine("Usage: PuppeteerSharp.RendererCli <sourceHtmlFilePath> <destinatioPdfFilePath>");
                 return 1;
             }
 
-            var inputPathDocx = args[0];
+            var inputPathDocX = args[0];
             var outputPathHtml = args[1];
 
-            if (!File.Exists(inputPathDocx))
+            if (!File.Exists(inputPathDocX))
             {
-                Console.WriteLine($"Could not find source {inputPathDocx}.");
+                Console.WriteLine($"Could not find source {inputPathDocX}.");
                 return 1;
             }
 
@@ -36,14 +36,12 @@ namespace Codeuctivity.HtmlRendererCli
                 return 1;
             }
 
-            Console.WriteLine($"Converting {inputPathDocx} to {outputPathHtml} using PuppeteerSharp.Renderer {Version}");
-            BrowserFetcherOptions options = new BrowserFetcherOptions();
-            options.Path = Path.GetTempPath();
-            var browserFetcher = new BrowserFetcher(options);
-            Console.WriteLine($"Fetching chromium from web, to {browserFetcher.DownloadsFolder} .... ");
+            Console.WriteLine($"Converting {inputPathDocX} to {outputPathHtml} using PuppeteerSharp.Renderer {Version}");
+            using var browserFetcher = new BrowserFetcher();
+            Console.WriteLine($"Fetching chromium from web, to {browserFetcher.CacheDir} .... ");
             browserFetcher.DownloadProgressChanged += BrowserFetcher_DownloadProgressChanged;
-            await using var chromiumRenderer = await Renderer.CreateAsync(browserFetcher, string.Empty);
-            await chromiumRenderer.ConvertHtmlToPdf(inputPathDocx, outputPathHtml);
+            await using var chromiumRenderer = await Renderer.CreateAsync(browserFetcher);
+            await chromiumRenderer.ConvertHtmlToPdf(inputPathDocX, outputPathHtml);
             return 0;
         }
 
