@@ -1,6 +1,6 @@
 name: .NET build and test
 env:
-  CURRENT_VERSION: 2.2.${{ github.run_number }}
+  CURRENT_VERSION: 3.0.${{ github.run_number }}
   LAST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 on:
@@ -18,22 +18,18 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+          dotnet-version: 8.0.x
+      - uses: actions/setup-node@v4.0.0
         with:
-          dotnet-version: 6.0.x
-      - uses: actions/setup-node@v3.8.1
-        with:
-          node-version: 18
+          node-version: 20
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfilePortable
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfileWindows
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfileWindows
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
       - name: Publish Unit Test Results
@@ -52,24 +48,20 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfilePortable
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfileWindows
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfileWindows
       - name: Zip FolderProfilePortable
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          directory: ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable
+          directory: ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable
           filename: 'Codeuctivity.HtmlRendererCli.Portable.zip'
       - name: NugetPush
         env:
@@ -77,18 +69,14 @@ jobs:
         if: env.NUGET_TOKEN_EXISTS != ''
         run: |
           dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: ${{ env.CURRENT_VERSION }}
-          prerelease: false
-          title: "Release Build"
-          files: |
-            ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
-            ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
-
+      - name: Github Release
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+        if:  env.GITHUB_TOKEN != ''
+        run: |
+            gh release create ${{env.CURRENT_VERSION}} ./Codeuctivity.HtmlRenderer/bin/Release/*.*nupkg ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe --generate-notes
+  
   deployTest:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -98,24 +86,20 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfilePortable
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfilePortable
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net6.0 -p:PublishProfile=FolderProfileWindows
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfileWindows
       - name: Zip FolderProfilePortable
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          directory: ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable
+          directory: ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable
           filename: 'Codeuctivity.HtmlRendererCli.Portable.zip'
       - name: NugetPush
         env:
@@ -124,14 +108,11 @@ jobs:
         run: |
           ls ./Codeuctivity.HtmlRenderer/bin/Release
           dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest-prerelease"
-          prerelease: true
-          title: "Prerelease Build"
-          files: |
-            ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg
-            ./Codeuctivity.HtmlRenderer/bin/Release/*.snupkg
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip
-            ./Codeuctivity.HtmlRendererCli/bin/Release/net6.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe
+
+      - name: Github Prerelease
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+        if:  env.GITHUB_TOKEN != ''
+        run: |
+            gh release create ${{env.CURRENT_VERSION}} ./Codeuctivity.HtmlRenderer/bin/Release/*.*nupkg ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe --prerelease --generate-notes
