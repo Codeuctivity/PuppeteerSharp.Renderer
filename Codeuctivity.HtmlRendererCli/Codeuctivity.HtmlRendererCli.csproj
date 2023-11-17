@@ -11,9 +11,6 @@
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />

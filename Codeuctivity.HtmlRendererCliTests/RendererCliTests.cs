@@ -74,7 +74,7 @@ namespace Codeuctivity.HtmlRendererCliTests
         private static string DotnetPublishFolderProfileWindows(string projectName)
         {
             var absolutePath = Path.GetFullPath("../../../../" + projectName);
-            var expectedBinaryPath = Path.Combine(absolutePath, $"bin/Release/net6.0/publish/FolderProfileWindows/{projectName}.exe");
+            var expectedBinaryPath = Path.Combine(absolutePath, $"bin/Release/net8.0/publish/FolderProfileWindows/{projectName}.exe");
 
             if (File.Exists(expectedBinaryPath))
             {
@@ -86,7 +86,7 @@ namespace Codeuctivity.HtmlRendererCliTests
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "dotnet",
-                    Arguments = $"publish {absolutePath} --configuration Release -f net6.0 -p:PublishProfile=FolderProfileWindows",
+                    Arguments = $"publish {absolutePath} --configuration Release -f net8.0 -p:PublishProfile=FolderProfileWindows",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
