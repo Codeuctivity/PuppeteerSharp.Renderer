@@ -1,5 +1,6 @@
 ﻿using PuppeteerSharp;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -10,6 +11,7 @@ namespace Codeuctivity.HtmlRenderer
     /// <summary>
     /// Renders HTML files
     /// </summary>
+    [RequiresUnreferencedCode("This functionality is not compatible with trimming. Use 'MethodFriendlyToTrimming' instead")]
     public class Renderer : IAsyncDisposable, IDisposable
     {
         /// <summary>

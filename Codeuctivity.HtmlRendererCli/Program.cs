@@ -40,8 +40,8 @@ namespace Codeuctivity.HtmlRendererCli
             using var browserFetcher = new BrowserFetcher();
             Console.WriteLine($"Fetching chromium from web, to {browserFetcher.CacheDir} .... ");
             browserFetcher.DownloadProgressChanged += BrowserFetcher_DownloadProgressChanged;
-            await using var chromiumRenderer = await Renderer.CreateAsync(browserFetcher);
-            await chromiumRenderer.ConvertHtmlToPdf(inputPathDocX, outputPathHtml);
+            using var renderer = await Renderer.CreateAsync(browserFetcher).ConfigureAwait(false);
+            await renderer.ConvertHtmlToPdf(inputPathDocX, outputPathHtml).ConfigureAwait(false);
             return 0;
         }
 

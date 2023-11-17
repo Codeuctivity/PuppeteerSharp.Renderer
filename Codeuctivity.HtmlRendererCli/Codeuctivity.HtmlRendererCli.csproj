@@ -9,6 +9,7 @@
 		<RootNamespace>Codeuctivity.HtmlRendererCli</RootNamespace>
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>embedded</DebugType>
+	  <TrimMode>partial</TrimMode>
 	</PropertyGroup>
 
 
