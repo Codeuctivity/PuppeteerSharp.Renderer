@@ -1,5 +1,3 @@
-Depends on node, runs on windows and linux
-
 # Render HTML to PDF
 
 ```c#
