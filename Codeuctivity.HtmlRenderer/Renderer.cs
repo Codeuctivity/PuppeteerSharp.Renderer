@@ -46,7 +46,7 @@ namespace Codeuctivity.HtmlRenderer
             }
         }
 
-        private IBrowser Browser { get; set; } = default!;
+        public IBrowser? Browser { get; set; }
         private int LastProgressValue { get; set; }
 
         /// <summary>
@@ -91,21 +91,11 @@ namespace Codeuctivity.HtmlRenderer
 
         private async Task<Renderer> InitializeAsync(BrowserFetcher browserFetcher)
         {
-            // for macsome reason the download progress is not called on macos
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                using var browserFetcher1 = new BrowserFetcher();
-                await browserFetcher1.DownloadAsync();
-                Browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
-            }
-            else
-            {
-                BrowserFetcher = browserFetcher;
-                BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
-                var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
-                LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
-                Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
-            }
+
+            BrowserFetcher = browserFetcher;
+            var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
+            LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
+            Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
 
             return this;
         }
@@ -268,6 +258,7 @@ namespace Codeuctivity.HtmlRenderer
             if (disposing)
             {
                 Browser?.Dispose();
+
             }
         }
 

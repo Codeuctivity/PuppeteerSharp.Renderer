@@ -205,7 +205,7 @@ namespace Codeuctivity.HtmlRendererTests
 
             await using (var chromiumRenderer = new Renderer())
             {
-                Assert.Null(chromiumRenderer.BrowserFetcher);
+                Assert.Null(chromiumRenderer.Browser);
             }
             var afterDisposeChromiumTasks = ChromiumProcessDisposedAsserter.CountChromiumTasks();
             Assert.Equal(afterDisposeChromiumTasks, initialChromiumTasks);
