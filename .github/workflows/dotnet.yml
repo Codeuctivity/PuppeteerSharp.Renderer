@@ -1,6 +1,6 @@
 name: .NET build and test
 env:
-  CURRENT_VERSION: 3.0.${{ github.run_number }}
+  CURRENT_VERSION: 4.0.${{ github.run_number }}
   LAST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 on:
@@ -19,9 +19,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - uses: actions/setup-node@v4.0.2
-        with:
-          node-version: 20
       - name: Restore dependencies
         run: dotnet restore
       - name: Build

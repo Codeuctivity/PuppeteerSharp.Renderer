@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -46,8 +45,10 @@ namespace Codeuctivity.HtmlRenderer
             }
         }
 
-        private IBrowser Browser { get; set; } = default!;
-        private int LastProgressValue { get; set; }
+        /// <summary>
+        /// Provides methods to interact with a browser.
+        /// </summary>
+        public IBrowser? Browser { get; set; }
 
         /// <summary>
         /// Browser fetcher - used to get chromium bins
@@ -62,8 +63,8 @@ namespace Codeuctivity.HtmlRenderer
         /// <returns>Initialized renderer</returns>
         public static Task<Renderer> CreateAsync()
         {
-            var html2Pdf = new Renderer();
-            return html2Pdf.InitializeAsync(new BrowserFetcher());
+            var renderer = new Renderer();
+            return renderer.InitializeAsync(new BrowserFetcher());
         }
 
         /// <summary>
@@ -91,21 +92,10 @@ namespace Codeuctivity.HtmlRenderer
 
         private async Task<Renderer> InitializeAsync(BrowserFetcher browserFetcher)
         {
-            // for macsome reason the download progress is not called on macos
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                using var browserFetcher1 = new BrowserFetcher();
-                await browserFetcher1.DownloadAsync();
-                Browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
-            }
-            else
-            {
-                BrowserFetcher = browserFetcher;
-                BrowserFetcher.DownloadProgressChanged += DownloadProgressChanged;
-                var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
-                LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
-                Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
-            }
+            BrowserFetcher = browserFetcher;
+            var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
+            LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
+            Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
 
             return this;
         }
@@ -128,7 +118,7 @@ namespace Codeuctivity.HtmlRenderer
                 return false;
             }
 
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && websiteSku.IndexOf("Linux", StringComparison.OrdinalIgnoreCase) >= 0;
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && websiteSku.Contains("Linux", StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsRunningOnWslOrAzure()
@@ -170,11 +160,21 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await using var page = await GetPage().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text rendered in PDF.
             await page.EvaluateExpressionHandleAsync("document.fonts.ready").ConfigureAwait(false);
             await page.PdfAsync(destinationPdfFilePath, pdfOptions).ConfigureAwait(false);
+        }
+
+        private async Task<IPage> GetPage()
+        {
+            if (Browser == null)
+            {
+                throw new RendererException("Call CreateAsync first");
+            }
+
+            return await Browser.NewPageAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Codeuctivity.HtmlRenderer
             }
 
             var absolutePath = Path.GetFullPath(sourceHtmlFilePath);
-            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await using var page = await GetPage().ConfigureAwait(false);
             await page.GoToAsync($"file://{absolutePath}").ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text the screenshot.
             await page.EvaluateExpressionHandleAsync("document.fonts.ready").ConfigureAwait(false);
@@ -224,19 +224,11 @@ namespace Codeuctivity.HtmlRenderer
         /// <param name="screenshotOptions"></param>
         public async Task<byte[]> ConvertHtmlStringToPngData(string sourceHtmlData, ScreenshotOptions screenshotOptions)
         {
-            await using var page = await Browser.NewPageAsync().ConfigureAwait(false);
+            await using var page = await GetPage().ConfigureAwait(false);
             await page.SetContentAsync(sourceHtmlData).ConfigureAwait(false);
             // Wait for fonts to be loaded. Omitting this might result in no text the screenshot.
             await page.EvaluateExpressionHandleAsync("document.fonts.ready").ConfigureAwait(false);
             return await page.ScreenshotDataAsync(screenshotOptions).ConfigureAwait(false);
-        }
-
-        private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            if (LastProgressValue != e.ProgressPercentage)
-            {
-                LastProgressValue = e.ProgressPercentage;
-            }
         }
 
         /// <summary>
