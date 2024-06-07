@@ -27,9 +27,6 @@ await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
 
 ```bash
 sudo apt install libgbm-dev libatk-bridge2.0-0 libnss3 libcups2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libpango-1.0-0 libcairo2 libasound2
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-exit
-nvm install 18
 ```
 
 ... and if that fails you can either find out which dependency is missing on your system or you take a shortcut

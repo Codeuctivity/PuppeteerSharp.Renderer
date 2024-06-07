@@ -14,6 +14,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
 
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
+            // File.Copy(actualFullPath, expectFullPath, true);
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
 
             if (ImageSharpCompare.ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
@@ -22,6 +23,11 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             }
 
             var osSpecificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                osSpecificDiffFileSuffix = "osx";
+            }
 
             var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
             var newDiffImage = $"{actualFullPath}.diff.png";
@@ -56,6 +62,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 
             if (allowedPixelErrorCount < result.PixelErrorCount)
             {
+                // File.Copy(newDiffImage, allowedDiffImage);
                 CopyToTestOutput(newDiffImage);
                 CopyToTestOutput(actualImagePath);
             }
