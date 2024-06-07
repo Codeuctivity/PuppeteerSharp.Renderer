@@ -14,6 +14,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
 
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
+            // File.Copy(actualFullPath, expectFullPath, true);
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
 
             if (ImageSharpCompare.ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
@@ -56,6 +57,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 
             if (allowedPixelErrorCount < result.PixelErrorCount)
             {
+                // File.Copy(newDiffImage, allowedDiffImage);
                 CopyToTestOutput(newDiffImage);
                 CopyToTestOutput(actualImagePath);
             }

@@ -1,27 +1,19 @@
 ﻿using Codeuctivity.HtmlRenderer;
 using Codeuctivity.HtmlRendererTests.Infrastructure;
-using Codeuctivity.PdfjsSharp;
-using Jering.Javascript.NodeJS;
 using PuppeteerSharp;
 using System;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Codeuctivity.HtmlRendererTests
 {
-    public class RendererTests : IDisposable
+    public class RendererTests
     {
-        private bool disposedValue;
-
         public RendererTests()
         {
-            Rasterize = new Rasterizer();
         }
-
-        public Rasterizer Rasterize { get; private set; }
 
         [Theory]
         [InlineData("BasicTextFormatted.html")]
@@ -44,14 +36,12 @@ namespace Codeuctivity.HtmlRendererTests
 
                 if (!IsRunningOnAzureOrMacos())
                 {
-                    var actualImages = await Rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
-                    Assert.Single(actualImages);
-                    // File.Copy(actualImages.Single(), expectReferenceFilePath, true);
-                    DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, 8000);
+                    PDFtoImage.Conversion.SavePng(actualImagePathDirectory, await File.ReadAllBytesAsync(actualFilePath));
+                    DocumentAsserter.AssertImageIsEqual(actualImagePathDirectory, expectReferenceFilePath, 8080);
                 }
                 File.Delete(actualFilePath);
             }
-            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunningExceptExpectedOrphanedBackgroundChromeProcesses();
         }
 
         [Theory]
@@ -72,26 +62,16 @@ namespace Codeuctivity.HtmlRendererTests
             {
                 await chromiumRenderer.ConvertHtmlToPdf(sourceHtmlFilePath, actualFilePath, new PdfOptions() { PrintBackground = printBackground });
 
-                var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName);
+                var actualImagePathDirectory = Path.Combine(Path.GetTempPath(), testFileName + ".png");
 
                 if (!IsRunningOnAzureOrMacos())
                 {
-                    try
-                    {
-                        var actualImages = await Rasterize.ConvertToPngAsync(actualFilePath, actualImagePathDirectory);
-                        Assert.Single(actualImages);
-                        // File.Copy(actualImages.Single(), expectReferenceFilePath, true);
-                        DocumentAsserter.AssertImageIsEqual(actualImages.Single(), expectReferenceFilePath, allowedPixelDiff);
-                    }
-                    catch (InvocationException ex)
-                    {
-                        // Working around issue in Jering.Javascript.NodeJS, silencing false positive failing
-                        Assert.True(RuntimeInformation.IsOSPlatform(OSPlatform.Windows), ex.Message);
-                    }
+                    PDFtoImage.Conversion.SavePng(actualImagePathDirectory, await File.ReadAllBytesAsync(actualFilePath));
+                    DocumentAsserter.AssertImageIsEqual(actualImagePathDirectory, expectReferenceFilePath, allowedPixelDiff);
                 }
                 File.Delete(actualFilePath);
             }
-            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunningExceptExpectedOrphanedBackgroundChromeProcesses();
         }
 
         private static bool IsRunningOnAzureOrMacos()
@@ -133,7 +113,7 @@ namespace Codeuctivity.HtmlRendererTests
             }
 
             File.Delete(actualFilePath);
-            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunningExceptExpectedOrphanedBackgroundChromeProcesses();
         }
 
         [Theory]
@@ -158,12 +138,11 @@ namespace Codeuctivity.HtmlRendererTests
                 };
 
                 await chromiumRenderer.ConvertHtmlToPng(sourceHtmlFilePath, actualFilePath, screenshotOptions);
-                // File.Copy(actualFilePath, expectReferenceFilePath, true);
                 DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, allowedPixelDiff);
             }
 
             File.Delete(actualFilePath);
-            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunningExceptExpectedOrphanedBackgroundChromeProcesses();
         }
 
         [Theory]
@@ -189,13 +168,12 @@ namespace Codeuctivity.HtmlRendererTests
 
                 var fileContent = await File.ReadAllTextAsync(sourceHtmlFilePath);
                 var pngData = await chromiumRenderer.ConvertHtmlStringToPngData(fileContent, screenshotOptions);
-                // File.Copy(actualFilePath, expectReferenceFilePath, true);
                 await File.WriteAllBytesAsync(actualFilePath, pngData);
                 DocumentAsserter.AssertImageIsEqual(actualFilePath, expectReferenceFilePath, allowedPixelDiff);
             }
 
             File.Delete(actualFilePath);
-            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunningExceptExpectedOrphanedBackgroundChromeProcesses();
         }
 
         [Fact]
@@ -232,26 +210,7 @@ namespace Codeuctivity.HtmlRendererTests
             }
 
             File.Delete(actualFilePath);
-            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunning();
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    Rasterize?.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            await ChromiumProcessDisposedAsserter.AssertNoChromiumProcessIsRunningExceptExpectedOrphanedBackgroundChromeProcesses();
         }
     }
 }

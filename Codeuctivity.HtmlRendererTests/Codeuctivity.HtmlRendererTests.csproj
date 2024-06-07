@@ -16,14 +16,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Codeuctivity.ImageSharpCompare" Version="4.0.258" />
-		<PackageReference Include="Codeuctivity.PdfjsSharp" Version="2.0.164" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.25.0.90414">
+		<PackageReference Include="PDFtoImage" Version="4.0.1" />
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.26.0.92422">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-		<PackageReference Include="xunit" Version="2.8.0" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.0">
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+		<PackageReference Include="xunit" Version="2.8.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>

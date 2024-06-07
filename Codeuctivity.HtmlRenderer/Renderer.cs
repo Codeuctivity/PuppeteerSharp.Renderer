@@ -92,7 +92,6 @@ namespace Codeuctivity.HtmlRenderer
 
         private async Task<Renderer> InitializeAsync(BrowserFetcher browserFetcher)
         {
-
             BrowserFetcher = browserFetcher;
             var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
             LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
@@ -261,7 +260,6 @@ namespace Codeuctivity.HtmlRenderer
             if (disposing)
             {
                 Browser?.Dispose();
-
             }
         }
 

@@ -19,9 +19,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - uses: actions/setup-node@v4.0.2
-        with:
-          node-version: 20
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
