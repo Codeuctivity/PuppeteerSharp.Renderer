@@ -7,13 +7,15 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 {
     public static class ChromiumProcessDisposedAsserter
     {
+        private const int maxExpectedBackgroundProcesses = 5;
+
         public static async Task AssertNoChromiumProcessIsRunningExceptExpectedOrphanedBackgroundChromeProcesses()
         {
-            for (var i = 0; i < 20 && CountChromiumTasks() > 0; i++)
+            for (var i = 0; i < 20 && CountChromiumTasks() > maxExpectedBackgroundProcesses; i++)
             {
                 await Task.Delay(200);
             }
-            Assert.True(CountChromiumTasks() <= 5);
+            Assert.True(CountChromiumTasks() <= maxExpectedBackgroundProcesses);
         }
 
         public static int CountChromiumTasks()

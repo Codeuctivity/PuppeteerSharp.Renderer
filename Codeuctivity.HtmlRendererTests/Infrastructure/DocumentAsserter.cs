@@ -24,6 +24,11 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
 
             var osSpecificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
 
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                osSpecificDiffFileSuffix = "osx";
+            }
+
             var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
             var newDiffImage = $"{actualFullPath}.diff.png";
             using (var fileStreamDifferenceMask = File.Create(newDiffImage))

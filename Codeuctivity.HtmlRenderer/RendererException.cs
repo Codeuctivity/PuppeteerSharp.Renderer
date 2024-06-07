@@ -6,7 +6,6 @@ namespace Codeuctivity.HtmlRenderer
     /// Throwing on missing CreateAsync
     /// </summary>
     [Serializable]
-
     public class RendererException : Exception
     {
         /// <summary>
