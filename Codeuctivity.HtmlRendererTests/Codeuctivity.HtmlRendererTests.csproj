@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Codeuctivity.ImageSharpCompare" Version="4.0.258" />
-		<PackageReference Include="PDFtoImage" Version="4.0.1" />
+		<PackageReference Include="PDFtoImage" Version="4.0.2" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.26.0.92422">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
