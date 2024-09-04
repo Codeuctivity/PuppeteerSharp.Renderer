@@ -39,7 +39,7 @@
 
   <ItemGroup>
 	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />
-	<PackageReference Include="PuppeteerSharp" Version="19.0.2" />
+	<PackageReference Include="PuppeteerSharp" Version="20.0.0" />
 	<PackageReference Include="SonarAnalyzer.CSharp" Version="9.26.0.92422">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
