@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	<TargetFrameworks>net8.0</TargetFrameworks>
@@ -15,11 +15,10 @@
 	<PackageReleaseNotes>$(LAST_COMMIT_MESSAGE)</PackageReleaseNotes>
 	<PackageIcon>NugetIcon.png</PackageIcon>
 	<PackageProjectUrl>https://github.com/Codeuctivity/PuppeteerSharp.Renderer</PackageProjectUrl>
-	<Description>Renders HTML to PNG or PDF, supports windows and linux</Description>
+	<Description>Renders HTML to PNG or PDF, supports windows, linux and macos</Description>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	<SignAssembly>True</SignAssembly>
-	<Optimize Condition="'$(GITHUB_ACTIONS)' == 'true'">true</Optimize>
 	<IncludeSymbols>true</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -38,9 +37,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />
-	<PackageReference Include="PuppeteerSharp" Version="20.0.2" />
-	<PackageReference Include="SonarAnalyzer.CSharp" Version="9.26.0.92422">
+	<PackageReference Include="PuppeteerSharp" Version="20.0.3" />
+	<PackageReference Include="SonarAnalyzer.CSharp" Version="9.32.0.97167">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>

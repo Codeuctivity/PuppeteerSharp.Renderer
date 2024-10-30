@@ -1,35 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
-		<IsPackable>false</IsPackable>
-		<Nullable>enable</Nullable>
-		<IsPackable>false</IsPackable>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-	</PropertyGroup>
+  <PropertyGroup>
+	<TargetFrameworks>net8.0</TargetFrameworks>
+	<IsPackable>false</IsPackable>
+	<Nullable>enable</Nullable>
+	<IsPackable>false</IsPackable>
+	<EnableNETAnalyzers>true</EnableNETAnalyzers>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<Compile Remove="SourceTestFiles\**" />
-		<EmbeddedResource Remove="SourceTestFiles\**" />
-		<None Remove="SourceTestFiles\**" />
-	</ItemGroup>
+  <ItemGroup>
+	<Compile Remove="SourceTestFiles\**" />
+	<EmbeddedResource Remove="SourceTestFiles\**" />
+	<None Remove="SourceTestFiles\**" />
+	
+	<SupportedPlatform Include="Linux" />
+	<SupportedPlatform Include="macOS" />
+	<SupportedPlatform Include="Windows" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Codeuctivity.ImageSharpCompare" Version="4.0.258" />
-		<PackageReference Include="PDFtoImage" Version="4.0.2" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.26.0.92422">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-		<PackageReference Include="xunit" Version="2.8.1" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-	</ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="Codeuctivity.ImageSharpCompare" Version="4.0.273" />
+	<PackageReference Include="PDFtoImage" Version="4.1.1" />
+	<PackageReference Include="SonarAnalyzer.CSharp" Version="9.32.0.97167">
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+	<PackageReference Include="xunit" Version="2.9.2" />
+	<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+	<ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\Stefan\Documents\source\repo\PuppeteerSharp.Renderer\Codeuctivity.HtmlRendererTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\Stefan\Documents\source\repo\PuppeteerSharp.Renderer\Codeuctivity.HtmlRendererTests\.editorconfig" />
+  </ItemGroup>
 </Project>
