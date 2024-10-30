@@ -8,7 +8,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
     {
         private const string TestOutputFirectory = "../../../../TestResult";
 
-        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount)
+        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount, int pixelColorShiftTolerance = 0)
         {
             var actualFullPath = Path.GetFullPath(actualImagePath);
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
@@ -29,7 +29,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
                 osSpecificDiffFileSuffix = "osx";
             }
 
-            var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
+            var osSpecificAllowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
             var newDiffImage = $"{actualFullPath}.diff.png";
             using (var fileStreamDifferenceMask = File.Create(newDiffImage))
             using (var maskImage = ImageSharpCompare.ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
@@ -37,18 +37,20 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
                 SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
             }
 
-            if (File.Exists(allowedDiffImage))
+            if (File.Exists(osSpecificAllowedDiffImage))
             {
-                var resultWithAllowedDiff = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
+                var resultWithOsSpecificAllowedDiff = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, osSpecificAllowedDiffImage);
 
-                if (allowedPixelErrorCount < resultWithAllowedDiff.PixelErrorCount)
+                if (allowedPixelErrorCount < resultWithOsSpecificAllowedDiff.PixelErrorCount)
                 {
                     CopyToTestOutput(actualImagePath);
                     CopyToTestOutput(expectImageFilePath);
                     CopyToTestOutput(newDiffImage);
                 }
 
-                Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}");
+                //  File.Copy(newDiffImage, osSpecificAllowedDiffImage, true);
+
+                Assert.True(resultWithOsSpecificAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithOsSpecificAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}");
                 return;
             }
 
@@ -58,7 +60,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
                 SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
             }
 
-            var result = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
+            var result = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, pixelColorShiftTolerance: pixelColorShiftTolerance);
 
             if (allowedPixelErrorCount < result.PixelErrorCount)
             {
@@ -67,7 +69,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
                 CopyToTestOutput(actualImagePath);
             }
 
-            Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}\nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
+            Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}\nReplace {actualFullPath} with the new value or store the diff as {osSpecificAllowedDiffImage}.");
         }
 
         private static void CopyToTestOutput(string testOutputFile)

@@ -1,5 +1,6 @@
 ﻿using PuppeteerSharp;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -95,6 +96,9 @@ namespace Codeuctivity.HtmlRenderer
             BrowserFetcher = browserFetcher;
             var revisionInfo = await BrowserFetcher.DownloadAsync(PuppeteerSharp.BrowserData.Chrome.DefaultBuildId).ConfigureAwait(false);
             LaunchOptions.ExecutablePath = revisionInfo.GetExecutablePath();
+
+            // Temporary work around https://github.com/hardkoded/puppeteer-sharp/issues/2782 https://stackoverflow.com/questions/78996364/chrome-129-headless-shows-blank-window
+            LaunchOptions.Args = new List<string>(LaunchOptions.Args ?? Array.Empty<string>()) { "--headless=old" }.ToArray();
             Browser = await Puppeteer.LaunchAsync(LaunchOptions).ConfigureAwait(false);
 
             return this;
@@ -171,7 +175,7 @@ namespace Codeuctivity.HtmlRenderer
         {
             if (Browser == null)
             {
-                throw new RendererException("Call CreateAsync first");
+                throw new RendererException($"Call {nameof(CreateAsync)} first");
             }
 
             return await Browser.NewPageAsync().ConfigureAwait(false);
