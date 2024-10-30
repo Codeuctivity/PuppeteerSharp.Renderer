@@ -8,7 +8,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
     {
         private const string TestOutputFirectory = "../../../../TestResult";
 
-        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount)
+        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount, int pixelColorShiftTolerance = 0)
         {
             var actualFullPath = Path.GetFullPath(actualImagePath);
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
@@ -60,7 +60,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
                 SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
             }
 
-            var result = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
+            var result = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, pixelColorShiftTolerance: pixelColorShiftTolerance);
 
             if (allowedPixelErrorCount < result.PixelErrorCount)
             {

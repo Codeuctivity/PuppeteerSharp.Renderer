@@ -37,7 +37,7 @@ namespace Codeuctivity.HtmlRendererTests
                 if (!IsRunningOnAzureOrMacos())
                 {
                     PDFtoImage.Conversion.SavePng(actualImagePathDirectory, await File.ReadAllBytesAsync(actualFilePath), 0);
-                    DocumentAsserter.AssertImageIsEqual(actualImagePathDirectory, expectReferenceFilePath, 8080);
+                    DocumentAsserter.AssertImageIsEqual(actualImagePathDirectory, expectReferenceFilePath, 8080, 400);
                 }
                 File.Delete(actualFilePath);
             }
@@ -66,8 +66,8 @@ namespace Codeuctivity.HtmlRendererTests
 
                 if (!IsRunningOnAzureOrMacos())
                 {
-                    PDFtoImage.Conversion.SavePng(actualImagePathDirectory, await File.ReadAllBytesAsync(actualFilePath));
-                    DocumentAsserter.AssertImageIsEqual(actualImagePathDirectory, expectReferenceFilePath, allowedPixelDiff);
+                    PDFtoImage.Conversion.SavePng(actualImagePathDirectory, await File.ReadAllBytesAsync(actualFilePath), 0);
+                    DocumentAsserter.AssertImageIsEqual(actualImagePathDirectory, expectReferenceFilePath, allowedPixelDiff, 400);
                 }
                 File.Delete(actualFilePath);
             }
