@@ -36,7 +36,7 @@ namespace Codeuctivity.HtmlRendererTests
 
                 if (!IsRunningOnAzureOrMacos())
                 {
-                    PDFtoImage.Conversion.SavePng(actualImagePathDirectory, await File.ReadAllBytesAsync(actualFilePath));
+                    PDFtoImage.Conversion.SavePng(actualImagePathDirectory, await File.ReadAllBytesAsync(actualFilePath), 0);
                     DocumentAsserter.AssertImageIsEqual(actualImagePathDirectory, expectReferenceFilePath, 8080);
                 }
                 File.Delete(actualFilePath);
