@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFrameworks>net8.0</TargetFrameworks>
+	<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<RepositoryUrl>https://github.com/Codeuctivity/PuppeteerSharp.Renderer</RepositoryUrl>
 	<PackageTags>HtmlToPdf HtmlToPng HTML render convert PDF PNG PuppeteerSharp HTML2PDF HTML2PNG linux windows</PackageTags>
