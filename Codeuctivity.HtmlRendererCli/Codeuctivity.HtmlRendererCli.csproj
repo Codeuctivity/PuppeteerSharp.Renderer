@@ -10,8 +10,13 @@
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>embedded</DebugType>
 	  <TrimMode>partial</TrimMode>
+	  <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	  <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<TrimmerRootAssembly Include="PuppeteerSharp" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Codeuctivity.HtmlRenderer\Codeuctivity.HtmlRenderer.csproj" />
