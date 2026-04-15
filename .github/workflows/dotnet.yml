@@ -5,7 +5,7 @@ env:
 
 on:
   push:
-  pull_request:
+
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
       - name: Publish Unit Test Results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: TestResult
