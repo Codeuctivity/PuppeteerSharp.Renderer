@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using Codeuctivity.SkiaSharpCompare;
+using SkiaSharp;
+using System.IO;
 using System.Runtime.InteropServices;
 using Xunit;
 
@@ -17,7 +19,7 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             // File.Copy(actualFullPath, expectFullPath, true);
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
 
-            if (ImageSharpCompare.ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
+            if (Compare.ImagesAreEqual(actualFullPath, expectFullPath))
             {
                 return;
             }
@@ -32,14 +34,14 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             var osSpecificAllowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
             var newDiffImage = $"{actualFullPath}.diff.png";
             using (var fileStreamDifferenceMask = File.Create(newDiffImage))
-            using (var maskImage = ImageSharpCompare.ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
+            using (var maskImage = Compare.CalcDiffMaskImage(actualFullPath, expectFullPath))
             {
-                SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
+                SaveAsPng(maskImage, fileStreamDifferenceMask);
             }
 
             if (File.Exists(osSpecificAllowedDiffImage))
             {
-                var resultWithOsSpecificAllowedDiff = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, osSpecificAllowedDiffImage);
+                var resultWithOsSpecificAllowedDiff = Compare.CalcDiff(actualFullPath, expectFullPath, osSpecificAllowedDiffImage);
 
                 if (allowedPixelErrorCount < resultWithOsSpecificAllowedDiff.PixelErrorCount)
                 {
@@ -55,12 +57,12 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             }
 
             using (var fileStreamDifferenceMask = File.Create(newDiffImage))
-            using (var maskImage = ImageSharpCompare.ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
+            using (var maskImage = Compare.CalcDiffMaskImage(actualFullPath, expectFullPath))
             {
-                SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
+                SaveAsPng(maskImage, fileStreamDifferenceMask);
             }
 
-            var result = ImageSharpCompare.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, pixelColorShiftTolerance: pixelColorShiftTolerance);
+            var result = Compare.CalcDiff(actualFullPath, expectFullPath, pixelColorShiftTolerance: pixelColorShiftTolerance);
 
             if (allowedPixelErrorCount < result.PixelErrorCount)
             {
@@ -70,6 +72,13 @@ namespace Codeuctivity.HtmlRendererTests.Infrastructure
             }
 
             Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}\nReplace {actualFullPath} with the new value or store the diff as {osSpecificAllowedDiffImage}.");
+        }
+
+        private static void SaveAsPng(SKBitmap bitmap, Stream stream)
+        {
+            using var image = SKImage.FromBitmap(bitmap);
+            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+            data.SaveTo(stream);
         }
 
         private static void CopyToTestOutput(string testOutputFile)

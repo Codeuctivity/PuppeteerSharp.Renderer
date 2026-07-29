@@ -146,13 +146,13 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormattedInlineBackground.html", false, 35000)]
+        [InlineData("BasicTextFormattedInlineBackground.html", false, 15000)]
         [InlineData("BasicTextFormattedInlineBackground.html", true, 9500)]
         public async Task ShouldConvertHtmlToPngBufferOptions(string testFileName, bool omitBackground, int allowedPixelDiff)
         {
             var sourceHtmlFilePath = $"../../../TestInput/{testFileName}";
-            var actualFilePath = Path.Combine(Path.GetTempPath(), $"ActualConvertHtmlToPng{testFileName}.{omitBackground}.png");
-            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedConvertHtmlToPng{testFileName}.{omitBackground}.png";
+            var actualFilePath = Path.Combine(Path.GetTempPath(), $"ActualConvertHtmlToPngDataBuffer{testFileName}.{omitBackground}.png");
+            var expectReferenceFilePath = $"../../../ExpectedTestOutcome/ExpectedConvertHtmlToPngDataBuffer{testFileName}.{omitBackground}.png";
 
             if (File.Exists(actualFilePath))
             {
