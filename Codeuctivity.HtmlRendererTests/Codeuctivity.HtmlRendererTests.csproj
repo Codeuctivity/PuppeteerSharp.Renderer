@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Codeuctivity.ImageSharpCompare" Version="4.0.273" />
+	<PackageReference Include="Codeuctivity.SkiaSharpCompare" Version="4.0.311" />
 	<PackageReference Include="PDFtoImage" Version="4.1.1" />
 	<PackageReference Include="SonarAnalyzer.CSharp" Version="9.32.0.97167">
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
