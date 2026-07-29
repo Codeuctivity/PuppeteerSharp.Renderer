@@ -109,6 +109,10 @@ jobs:
         with:
           name: cli-macos
           path: ./artifacts/macos
+      - name: Rename Linux and macOS binaries
+        run: |
+          mv ./artifacts/linux/Codeuctivity.HtmlRendererCli ./artifacts/linux/Codeuctivity.HtmlRendererCli-linux-x64
+          mv ./artifacts/macos/Codeuctivity.HtmlRendererCli ./artifacts/macos/Codeuctivity.HtmlRendererCli-osx-x64
       - name: Zip Portable artifact
         uses: thedoctor0/zip-release@main
         with:
@@ -127,7 +131,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         if:  env.GITHUB_TOKEN != ''
         run: |
-            gh release create ${{env.CURRENT_VERSION}} ./artifacts/nuget/*.*nupkg ./artifacts/portable/Codeuctivity.HtmlRendererCli.Portable.zip ./artifacts/windows/Codeuctivity.HtmlRendererCli.exe ./artifacts/linux/Codeuctivity.HtmlRendererCli ./artifacts/macos/Codeuctivity.HtmlRendererCli --generate-notes
+            gh release create ${{env.CURRENT_VERSION}} ./artifacts/nuget/*.*nupkg ./artifacts/portable/Codeuctivity.HtmlRendererCli.Portable.zip ./artifacts/windows/Codeuctivity.HtmlRendererCli.exe ./artifacts/linux/Codeuctivity.HtmlRendererCli-linux-x64 ./artifacts/macos/Codeuctivity.HtmlRendererCli-osx-x64 --generate-notes
 
   deployTest:
     if: github.ref == 'refs/heads/main'
@@ -164,6 +168,10 @@ jobs:
         with:
           name: cli-macos
           path: ./artifacts/macos
+      - name: Rename Linux and macOS binaries
+        run: |
+          mv ./artifacts/linux/Codeuctivity.HtmlRendererCli ./artifacts/linux/Codeuctivity.HtmlRendererCli-linux-x64
+          mv ./artifacts/macos/Codeuctivity.HtmlRendererCli ./artifacts/macos/Codeuctivity.HtmlRendererCli-osx-x64
       - name: Zip Portable artifact
         uses: thedoctor0/zip-release@main
         with:
@@ -183,4 +191,4 @@ jobs:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         if:  env.GITHUB_TOKEN != ''
         run: |
-            gh release create ${{env.CURRENT_VERSION}} ./artifacts/nuget/*.*nupkg ./artifacts/portable/Codeuctivity.HtmlRendererCli.Portable.zip ./artifacts/windows/Codeuctivity.HtmlRendererCli.exe ./artifacts/linux/Codeuctivity.HtmlRendererCli ./artifacts/macos/Codeuctivity.HtmlRendererCli --prerelease --generate-notes
+            gh release create ${{env.CURRENT_VERSION}} ./artifacts/nuget/*.*nupkg ./artifacts/portable/Codeuctivity.HtmlRendererCli.Portable.zip ./artifacts/windows/Codeuctivity.HtmlRendererCli.exe ./artifacts/linux/Codeuctivity.HtmlRendererCli-linux-x64 ./artifacts/macos/Codeuctivity.HtmlRendererCli-osx-x64 --prerelease --generate-notes
