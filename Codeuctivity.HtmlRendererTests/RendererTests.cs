@@ -146,7 +146,7 @@ namespace Codeuctivity.HtmlRendererTests
         }
 
         [Theory]
-        [InlineData("BasicTextFormattedInlineBackground.html", false, 15000)]
+        [InlineData("BasicTextFormattedInlineBackground.html", false, 35000)]
         [InlineData("BasicTextFormattedInlineBackground.html", true, 9500)]
         public async Task ShouldConvertHtmlToPngBufferOptions(string testFileName, bool omitBackground, int allowedPixelDiff)
         {

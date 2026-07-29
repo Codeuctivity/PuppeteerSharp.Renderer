@@ -25,7 +25,7 @@ namespace Codeuctivity.HtmlRenderer
             }
             else
             {
-                LaunchOptions = new LaunchOptions() { Args = new[] { customChromiumArgs } };
+                LaunchOptions = new LaunchOptions() { Headless = true, Args = new[] { customChromiumArgs }, Timeout = DefaultLaunchTimeoutMs };
             }
         }
 
@@ -75,7 +75,7 @@ namespace Codeuctivity.HtmlRenderer
         /// <returns></returns>
         public static Task<Renderer> CreateAsync(BrowserFetcher browserFetcher, string chromiumArguments)
         {
-            return CreateAsync(browserFetcher, new LaunchOptions() { Args = new[] { chromiumArguments } });
+            return CreateAsync(browserFetcher, new LaunchOptions() { Headless = true, Args = new[] { chromiumArguments }, Timeout = DefaultLaunchTimeoutMs });
         }
 
         /// <summary>
@@ -99,13 +99,15 @@ namespace Codeuctivity.HtmlRenderer
             return this;
         }
 
+        private const int DefaultLaunchTimeoutMs = 60000;
+
         private static LaunchOptions SystemSpecificConfig()
         {
             if (IsRunningOnWslOrAzure() || IsRunningOnAzureLinux())
             {
-                return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" } };
+                return new LaunchOptions { Headless = true, Args = new string[] { "--no-sandbox" }, Timeout = DefaultLaunchTimeoutMs };
             }
-            return new LaunchOptions();
+            return new LaunchOptions { Timeout = DefaultLaunchTimeoutMs };
         }
 
         private static bool IsRunningOnAzureLinux()

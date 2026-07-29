@@ -1,6 +1,6 @@
 name: .NET build and test
 env:
-  CURRENT_VERSION: 4.0.${{ github.run_number }}
+  CURRENT_VERSION: 5.0.${{ github.run_number }}
   LAST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 on:
@@ -18,23 +18,61 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfilePortable
+        if: matrix.os == 'windows-latest'
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net10.0 -p:PublishProfile=FolderProfilePortable
       - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfileWindows
+        if: matrix.os == 'windows-latest'
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net10.0 -p:PublishProfile=FolderProfileWindows
+      - name: Publish FolderProfileLinux
+        if: matrix.os == 'ubuntu-latest'
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net10.0 -p:PublishProfile=FolderProfileLinux
+      - name: Publish FolderProfileMacos
+        if: matrix.os == 'macos-latest'
+        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net10.0 -p:PublishProfile=FolderProfileMacos
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
       - name: Publish Unit Test Results
         uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: TestResult
+          name: TestResult-${{ matrix.os }}
           path: "TestResult/**/*"
+      - name: Upload NuGet packages
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages
+          path: ./Codeuctivity.HtmlRenderer/bin/Release/*.*nupkg
+      - name: Upload Portable artifact
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v7
+        with:
+          name: cli-portable
+          path: ./Codeuctivity.HtmlRendererCli/bin/Release/net10.0/publish/FolderProfilePortable
+      - name: Upload Windows artifact
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v7
+        with:
+          name: cli-windows
+          path: ./Codeuctivity.HtmlRendererCli/bin/Release/net10.0/publish/FolderProfileWindows
+      - name: Upload Linux artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v7
+        with:
+          name: cli-linux
+          path: ./Codeuctivity.HtmlRendererCli/bin/Release/net10.0/publish/FolderProfileLinux
+      - name: Upload macOS artifact
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v7
+        with:
+          name: cli-macos
+          path: ./Codeuctivity.HtmlRendererCli/bin/Release/net10.0/publish/FolderProfileMacos
 
   deployRelease:
     if: github.ref == 'refs/heads/release'
@@ -45,35 +83,52 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 8.0.x
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfilePortable
-      - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfileWindows
-      - name: Zip FolderProfilePortable
+          dotnet-version: 10.0.x
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v7
+        with:
+          name: nuget-packages
+          path: ./artifacts/nuget
+      - name: Download Portable artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-portable
+          path: ./artifacts/portable
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-windows
+          path: ./artifacts/windows
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-linux
+          path: ./artifacts/linux
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-macos
+          path: ./artifacts/macos
+      - name: Zip Portable artifact
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          directory: ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable
+          directory: ./artifacts/portable
           filename: 'Codeuctivity.HtmlRendererCli.Portable.zip'
       - name: NugetPush
         env:
           NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TOKEN }}
         if: env.NUGET_TOKEN_EXISTS != ''
         run: |
-          dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
+          dotnet nuget push ./artifacts/nuget/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
       - name: Github Release
         shell: bash
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         if:  env.GITHUB_TOKEN != ''
         run: |
-            gh release create ${{env.CURRENT_VERSION}} ./Codeuctivity.HtmlRenderer/bin/Release/*.*nupkg ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe --generate-notes
-  
+            gh release create ${{env.CURRENT_VERSION}} ./artifacts/nuget/*.*nupkg ./artifacts/portable/Codeuctivity.HtmlRendererCli.Portable.zip ./artifacts/windows/Codeuctivity.HtmlRendererCli.exe ./artifacts/linux/Codeuctivity.HtmlRendererCli ./artifacts/macos/Codeuctivity.HtmlRendererCli --generate-notes
+
   deployTest:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -83,28 +138,44 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 8.0.x
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Publish FolderProfilePortable
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfilePortable
-      - name: Publish FolderProfileWindows
-        run: dotnet publish ./Codeuctivity.HtmlRendererCli --configuration Release -f net8.0 -p:PublishProfile=FolderProfileWindows
-      - name: Zip FolderProfilePortable
+          dotnet-version: 10.0.x
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v7
+        with:
+          name: nuget-packages
+          path: ./artifacts/nuget
+      - name: Download Portable artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-portable
+          path: ./artifacts/portable
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-windows
+          path: ./artifacts/windows
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-linux
+          path: ./artifacts/linux
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cli-macos
+          path: ./artifacts/macos
+      - name: Zip Portable artifact
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          directory: ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable
+          directory: ./artifacts/portable
           filename: 'Codeuctivity.HtmlRendererCli.Portable.zip'
       - name: NugetPush
         env:
           NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TEST_TOKEN }}
         if: env.NUGET_TOKEN_EXISTS != ''
         run: |
-          ls ./Codeuctivity.HtmlRenderer/bin/Release
-          dotnet nuget push ./Codeuctivity.HtmlRenderer/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
+          dotnet nuget push ./artifacts/nuget/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
 
       - name: Github Prerelease
         shell: bash
@@ -112,4 +183,4 @@ jobs:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         if:  env.GITHUB_TOKEN != ''
         run: |
-            gh release create ${{env.CURRENT_VERSION}} ./Codeuctivity.HtmlRenderer/bin/Release/*.*nupkg ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfilePortable/Codeuctivity.HtmlRendererCli.Portable.zip ./Codeuctivity.HtmlRendererCli/bin/Release/net8.0/publish/FolderProfileWindows/Codeuctivity.HtmlRendererCli.exe --prerelease --generate-notes
+            gh release create ${{env.CURRENT_VERSION}} ./artifacts/nuget/*.*nupkg ./artifacts/portable/Codeuctivity.HtmlRendererCli.Portable.zip ./artifacts/windows/Codeuctivity.HtmlRendererCli.exe ./artifacts/linux/Codeuctivity.HtmlRendererCli ./artifacts/macos/Codeuctivity.HtmlRendererCli --prerelease --generate-notes
