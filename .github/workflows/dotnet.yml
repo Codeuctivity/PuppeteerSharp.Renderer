@@ -192,3 +192,17 @@ jobs:
         if:  env.GITHUB_TOKEN != ''
         run: |
             gh release create ${{env.CURRENT_VERSION}} ./artifacts/nuget/*.*nupkg ./artifacts/portable/Codeuctivity.HtmlRendererCli.Portable.zip ./artifacts/windows/Codeuctivity.HtmlRendererCli.exe ./artifacts/linux/Codeuctivity.HtmlRendererCli-linux-x64 ./artifacts/macos/Codeuctivity.HtmlRendererCli-osx-x64 --prerelease --generate-notes
+
+      - name: Purge old prereleases
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+        if:  env.GITHUB_TOKEN != ''
+        run: |
+            KEEP=5
+            gh release list --json tagName,isPrerelease,isDraft,publishedAt \
+              --jq "[.[] | select(.isPrerelease and (.isDraft | not))] | sort_by(.publishedAt) | reverse | .[$KEEP:] | .[].tagName" \
+              | while read -r tag; do
+                  echo "Deleting old prerelease $tag"
+                  gh release delete "$tag" --cleanup-tag --yes
+                done
