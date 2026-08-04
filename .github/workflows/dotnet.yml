@@ -85,27 +85,27 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - name: Download NuGet packages
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nuget-packages
           path: ./artifacts/nuget
       - name: Download Portable artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-portable
           path: ./artifacts/portable
       - name: Download Windows artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-windows
           path: ./artifacts/windows
       - name: Download Linux artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-linux
           path: ./artifacts/linux
       - name: Download macOS artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-macos
           path: ./artifacts/macos
@@ -144,27 +144,27 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - name: Download NuGet packages
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nuget-packages
           path: ./artifacts/nuget
       - name: Download Portable artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-portable
           path: ./artifacts/portable
       - name: Download Windows artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-windows
           path: ./artifacts/windows
       - name: Download Linux artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-linux
           path: ./artifacts/linux
       - name: Download macOS artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: cli-macos
           path: ./artifacts/macos
